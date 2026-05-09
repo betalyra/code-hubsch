@@ -22,27 +22,31 @@ export function EditorToolbar({
     detected.language !== language &&
     detected.confidence > 0.05
 
+  const detectedNode = showDetected ? (
+    <button
+      type="button"
+      onClick={() => onLanguageChange(detected.language)}
+      className="text-xs text-muted-foreground transition-colors hover:text-primary"
+    >
+      Detected:{' '}
+      <span className="text-foreground">
+        {LANGUAGES.find((l) => l.value === detected.language)?.label}
+      </span>{' '}
+      — apply
+    </button>
+  ) : null
+
   return (
-    <div className="flex flex-wrap items-start justify-between gap-2 sm:gap-3">
-      <h2 className="pt-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+    <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+      <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
         Editor
       </h2>
 
-      <div className="flex w-full flex-col gap-1 sm:w-56">
-        <LanguageCombobox value={language} onChange={onLanguageChange} />
-        {showDetected && (
-          <button
-            type="button"
-            onClick={() => onLanguageChange(detected.language)}
-            className="self-end text-[10px] text-muted-foreground transition-colors hover:text-primary"
-          >
-            Detected:{' '}
-            <span className="text-foreground">
-              {LANGUAGES.find((l) => l.value === detected.language)?.label}
-            </span>{' '}
-            — apply
-          </button>
-        )}
+      <div className="flex w-full flex-col items-end gap-1 sm:w-auto sm:flex-row-reverse sm:items-center sm:gap-3">
+        <div className="w-full sm:w-56">
+          <LanguageCombobox value={language} onChange={onLanguageChange} />
+        </div>
+        {detectedNode}
       </div>
     </div>
   )

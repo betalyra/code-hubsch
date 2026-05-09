@@ -22,7 +22,14 @@ import {
   downloadPng,
   downloadSvg,
 } from '#/lib/download'
+import { baseFilename, buildDownloadName, shortHash } from '#/lib/filename'
 import type { Page } from '#/lib/render'
+import type { PreviewView } from '#/components/Preview'
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from '#/components/ui/toggle-group'
+import { RiCollapseDiagonalLine, RiExpandDiagonalLine } from 'react-icons/ri'
 import { clearSettings, loadSettings, saveSettings } from '#/lib/storage'
 import type { Settings } from '#/lib/types'
 
@@ -74,6 +81,7 @@ function Home() {
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
   const [busy, setBusy] = useState(false)
   const [detected, setDetected] = useState<Detection | undefined>(undefined)
+  const [previewView, setPreviewView] = useState<PreviewView>('actual')
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -132,6 +140,9 @@ function Home() {
     }
   }, [pages])
 
+  const settingsKey = JSON.stringify(settings)
+  const proposedFilename = `${baseFilename(settings.filename)}-${shortHash(settingsKey)}`
+
   const handlePng = useCallback(async () => {
     if (pages.length === 0) return
     setBusy(true)
@@ -139,23 +150,25 @@ function Home() {
       if (pages.length === 1) {
         const page = pages[0]
         if (page) {
-          await downloadPng(page.svg, page.width, page.height, 'code.png')
+          const name = buildDownloadName(settings.filename, settingsKey, 'png')
+          await downloadPng(page.svg, page.width, page.height, name)
         }
       } else {
         const first = pages[0]
         if (!first) return
+        const name = buildDownloadName(settings.filename, settingsKey, 'zip')
         await downloadPagesZip(
           pages.map((p) => p.svg),
           first.width,
           first.height,
           'png',
-          'code.zip',
+          name,
         )
       }
     } finally {
       setBusy(false)
     }
-  }, [pages])
+  }, [pages, settings.filename, settingsKey])
 
   const handleSvgDownload = useCallback(async () => {
     if (pages.length === 0) return
@@ -163,22 +176,26 @@ function Home() {
     try {
       if (pages.length === 1) {
         const page = pages[0]
-        if (page) downloadSvg(page.svg, 'code.svg')
+        if (page) {
+          const name = buildDownloadName(settings.filename, settingsKey, 'svg')
+          downloadSvg(page.svg, name)
+        }
       } else {
         const first = pages[0]
         if (!first) return
+        const name = buildDownloadName(settings.filename, settingsKey, 'zip')
         await downloadPagesZip(
           pages.map((p) => p.svg),
           first.width,
           first.height,
           'svg',
-          'code.zip',
+          name,
         )
       }
     } finally {
       setBusy(false)
     }
-  }, [pages])
+  }, [pages, settings.filename, settingsKey])
 
   const controlsProps = {
     settings,
@@ -190,6 +207,7 @@ function Home() {
     onDownloadSvg: handleSvgDownload,
     rendering: busy || pages.length === 0,
     pageCount: pages.length,
+    proposedFilename,
   }
 
   return (
@@ -265,18 +283,54 @@ function Home() {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-              <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                Preview · {settings.width}×{settings.height}
-              </h2>
-              {pages.length > 1 && (
-                <span className="text-xs text-muted-foreground">
-                  {pages.length} pages — downloads as zip
-                </span>
-              )}
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                  Preview · {settings.width}×{settings.height}
+                </h2>
+                {pages.length > 1 && (
+                  <span className="text-xs text-muted-foreground">
+                    {pages.length} pages — downloads as zip
+                  </span>
+                )}
+              </div>
+              <ToggleGroup
+                type="single"
+                spacing={0}
+                value={previewView}
+                onValueChange={(v) => v && setPreviewView(v as PreviewView)}
+                aria-label="Preview zoom"
+              >
+                <ToggleGroupItem
+                  value="fit"
+                  size="sm"
+                  variant="outline"
+                  className="h-7 px-2 text-[11px]"
+                  aria-label="Fit to width"
+                  title="Fit to width"
+                >
+                  <RiCollapseDiagonalLine />
+                  Fit
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="actual"
+                  size="sm"
+                  variant="outline"
+                  className="h-7 px-2 text-[11px]"
+                  aria-label="Actual size"
+                  title="Actual size (1:1)"
+                >
+                  <RiExpandDiagonalLine />
+                  1:1
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
-            <Preview settings={settings} onPages={handlePages} />
+            <Preview
+              settings={settings}
+              view={previewView}
+              onPages={handlePages}
+            />
           </div>
         </div>
       </main>

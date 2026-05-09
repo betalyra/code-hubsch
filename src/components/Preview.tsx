@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react'
-import { RiExpandDiagonalLine, RiCollapseDiagonalLine } from 'react-icons/ri'
-import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
 import { type Page, renderCodePages } from '#/lib/render'
 import type { Settings } from '#/lib/types'
 
+export type PreviewView = 'fit' | 'actual'
+
 interface Props {
   settings: Settings
+  view: PreviewView
   onPages: (pages: ReadonlyArray<Page>) => void
 }
 
 const DEBOUNCE_MS = 200
-
-type ViewMode = 'fit' | 'actual'
 
 const responsiveSvg = (svg: string): string =>
   svg.replace(
@@ -19,11 +18,10 @@ const responsiveSvg = (svg: string): string =>
     '<svg$1 style="width:100%;height:auto;display:block">',
   )
 
-export function Preview({ settings, onPages }: Props) {
+export function Preview({ settings, view, onPages }: Props) {
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
   const [error, setError] = useState<string | undefined>(undefined)
   const [rendering, setRendering] = useState(false)
-  const [view, setView] = useState<ViewMode>('actual')
 
   useEffect(() => {
     let cancelled = false
@@ -53,40 +51,7 @@ export function Preview({ settings, onPages }: Props) {
   const isFit = view === 'fit'
 
   return (
-    <div className="relative flex w-full flex-col gap-2">
-      <div className="flex justify-end">
-        <ToggleGroup
-          type="single"
-          spacing={0}
-          value={view}
-          onValueChange={(v) => v && setView(v as ViewMode)}
-          aria-label="Preview zoom"
-        >
-          <ToggleGroupItem
-            value="fit"
-            size="sm"
-            variant="outline"
-            className="h-7 px-2 text-[11px]"
-            aria-label="Fit to width"
-            title="Fit to width"
-          >
-            <RiCollapseDiagonalLine />
-            Fit
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="actual"
-            size="sm"
-            variant="outline"
-            className="h-7 px-2 text-[11px]"
-            aria-label="Actual size"
-            title="Actual size (1:1)"
-          >
-            <RiExpandDiagonalLine />
-            1:1
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-
+    <div className="relative flex w-full flex-col gap-3">
       <div className="flex w-full flex-col gap-3">
         {pages.length > 0 ? (
           pages.map((page) => (

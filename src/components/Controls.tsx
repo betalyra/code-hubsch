@@ -56,6 +56,7 @@ interface Props {
   onDownloadSvg: () => void
   rendering: boolean
   pageCount: number
+  proposedFilename: string
 }
 
 const SectionTitle = ({
@@ -193,6 +194,7 @@ export function Controls({
   onDownloadSvg,
   rendering,
   pageCount,
+  proposedFilename,
 }: Props) {
   const multi = pageCount > 1
 
@@ -683,13 +685,16 @@ export function Controls({
           <AccordionContent className="flex flex-col gap-3">
             {settings.chrome && (
               <div className="flex flex-col gap-1">
-                <FieldLabel label="Filename in chrome" />
+                <FieldLabel label="Filename" />
                 <Input
-                  placeholder="tweet.ts"
+                  placeholder={proposedFilename}
                   value={settings.filename}
                   onChange={(e) => onChange({ filename: e.target.value })}
                   className="h-7 text-xs"
                 />
+                <span className="text-[10px] text-muted-foreground">
+                  Saves as <span className="tabular-nums">{proposedFilename}</span>
+                </span>
               </div>
             )}
             <div className="grid grid-cols-2 gap-1.5">
