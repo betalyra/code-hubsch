@@ -19,6 +19,7 @@ interface Props {
   fallbackColor: string
   highlightedLines: string
   highlightColor: string
+  showLineNumbers: boolean
   onChange: (code: string) => void
   onHighlightChange: (next: string) => void
 }
@@ -43,6 +44,7 @@ export function Editor({
   fallbackColor,
   highlightedLines,
   highlightColor,
+  showLineNumbers,
   onChange,
   onHighlightChange,
 }: Props) {
@@ -66,6 +68,9 @@ export function Editor({
   const lineHeightPx = Math.round(fontSize * lineHeight)
   const padding = 20
   const lineCount = Math.max(code.split('\n').length, lines.length)
+  const digits = Math.max(2, String(Math.max(1, lineCount)).length)
+  const lineNumberWidth = digits * 8 + 4
+  const gutterWidth = lineNumberWidth + 24 + 4
 
   const highlightSet = useMemo(
     () => new Set(parseLineRanges(highlightedLines)),
@@ -125,7 +130,10 @@ export function Editor({
     >
       <div
         className="relative h-full shrink-0 overflow-hidden border-r border-white/5"
-        style={{ width: 36, paddingTop: padding }}
+        style={{
+          width: showLineNumbers ? gutterWidth : 36,
+          paddingTop: padding,
+        }}
       >
         <div
           ref={gutterInnerRef}
@@ -136,30 +144,51 @@ export function Editor({
             const ln = i + 1
             const on = highlightSet.has(ln)
             return (
-              <button
+              <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: stable
                 key={i}
-                type="button"
-                aria-label={`toggle highlight for line ${ln}`}
-                onClick={() => toggleLine(ln)}
-                style={{
-                  height: lineHeightPx,
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                className="group/bubble"
+                style={{ height: lineHeightPx, display: 'flex', alignItems: 'center' }}
               >
-                <span
-                  className={
-                    on
-                      ? 'block size-2.5 rounded-full shadow-[0_0_0_2px_rgba(0,0,0,0.4)]'
-                      : 'block size-2 rounded-full border border-white/25 bg-transparent transition-colors group-hover/bubble:bg-white/15'
-                  }
-                  style={on ? { backgroundColor: highlightColor } : undefined}
-                />
-              </button>
+                {showLineNumbers && (
+                  <span
+                    style={{
+                      width: lineNumberWidth,
+                      paddingRight: 8,
+                      fontFamily,
+                      fontSize: Math.max(10, fontSize - 2),
+                      lineHeight: 1,
+                      color: fallbackColor,
+                      opacity: 0.45,
+                      textAlign: 'right',
+                    }}
+                    className="tabular-nums"
+                  >
+                    {ln}
+                  </span>
+                )}
+                <button
+                  type="button"
+                  aria-label={`toggle highlight for line ${ln}`}
+                  onClick={() => toggleLine(ln)}
+                  style={{
+                    height: lineHeightPx,
+                    width: 24,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  className="group/bubble"
+                >
+                  <span
+                    className={
+                      on
+                        ? 'block size-2.5 rounded-full shadow-[0_0_0_2px_rgba(0,0,0,0.4)]'
+                        : 'block size-2 rounded-full border border-white/25 bg-transparent transition-colors group-hover/bubble:bg-white/15'
+                    }
+                    style={on ? { backgroundColor: highlightColor } : undefined}
+                  />
+                </button>
+              </div>
             )
           })}
         </div>

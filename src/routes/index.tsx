@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { RiSparkling2Line } from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
+import { EditorToolbar } from '#/components/EditorToolbar'
 import { Preview } from '#/components/Preview'
 import { Separator } from '#/components/ui/separator'
 import { type Detection, detectLanguage } from '#/lib/detect'
@@ -196,15 +197,16 @@ function Home() {
             onDownloadSvg={handleSvgDownload}
             rendering={busy || pages.length === 0}
             pageCount={pages.length}
-            detected={detected}
           />
         </div>
 
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              Editor
-            </h2>
+          <div className="flex flex-col gap-3">
+            <EditorToolbar
+              language={settings.language}
+              detected={detected}
+              onLanguageChange={(language) => update({ language })}
+            />
             <Editor
               code={settings.code}
               language={settings.language}
@@ -216,6 +218,7 @@ function Home() {
               fallbackColor="#d6deeb"
               highlightedLines={settings.highlightedLines}
               highlightColor={settings.highlightColor}
+              showLineNumbers={settings.lineNumbers}
               onChange={(code) => update({ code })}
               onHighlightChange={(highlightedLines) =>
                 update({ highlightedLines })
