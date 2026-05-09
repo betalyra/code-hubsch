@@ -23,12 +23,12 @@ export function EditorToolbar({
     detected.confidence > 0.05
 
   return (
-    <div className="flex items-start justify-between gap-3">
+    <div className="flex flex-wrap items-start justify-between gap-2 sm:gap-3">
       <h2 className="pt-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
         Editor
       </h2>
 
-      <div className="flex w-56 flex-col gap-1">
+      <div className="flex w-full flex-col gap-1 sm:w-56">
         <LanguageCombobox value={language} onChange={onLanguageChange} />
         {showDetected && (
           <button

@@ -1,11 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
-import { RiSparkling2Line } from 'react-icons/ri'
+import { RiSettings3Line, RiSparkling2Line } from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
 import { EditorToolbar } from '#/components/EditorToolbar'
 import { Preview } from '#/components/Preview'
+import { Button } from '#/components/ui/button'
 import { Separator } from '#/components/ui/separator'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '#/components/ui/sheet'
 import { type Detection, detectLanguage } from '#/lib/detect'
 import {
   copyPngToClipboard,
@@ -172,35 +180,66 @@ function Home() {
     }
   }, [pages])
 
+  const controlsProps = {
+    settings,
+    onChange: update,
+    onReset: handleReset,
+    onCopyPng: handleCopyPng,
+    onCopySvg: handleCopySvg,
+    onDownloadPng: handlePng,
+    onDownloadSvg: handleSvgDownload,
+    rendering: busy || pages.length === 0,
+    pageCount: pages.length,
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b px-6 py-4">
+      <header className="border-b px-4 py-3 sm:px-6 sm:py-4">
         <div className="mx-auto flex max-w-[1600px] items-center gap-2">
           <RiSparkling2Line className="text-xl text-foreground/80" />
-          <h1 className="text-lg font-medium tracking-tight">code pretty</h1>
-          <Separator orientation="vertical" className="mx-2 h-4" />
-          <span className="text-sm text-muted-foreground">
+          <h1 className="text-base font-medium tracking-tight sm:text-lg">
+            code pretty
+          </h1>
+          <Separator
+            orientation="vertical"
+            className="mx-2 hidden h-4 sm:block"
+          />
+          <span className="hidden text-sm text-muted-foreground sm:inline">
             tweet-ready code images
           </span>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="ml-auto lg:hidden"
+                aria-label="Open settings"
+              >
+                <RiSettings3Line data-icon="inline-start" />
+                Settings
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="flex w-[92vw] max-w-md flex-col gap-3 overflow-y-auto p-4 sm:w-96"
+            >
+              <SheetHeader className="px-0">
+                <SheetTitle>Settings</SheetTitle>
+              </SheetHeader>
+              <Controls {...controlsProps} />
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-[1600px] items-start gap-6 p-6 lg:grid-cols-[340px_minmax(0,1fr)]">
-        <div className="self-start lg:sticky lg:top-6">
-          <Controls
-            settings={settings}
-            onChange={update}
-            onReset={handleReset}
-            onCopyPng={handleCopyPng}
-            onCopySvg={handleCopySvg}
-            onDownloadPng={handlePng}
-            onDownloadSvg={handleSvgDownload}
-            rendering={busy || pages.length === 0}
-            pageCount={pages.length}
-          />
+      <main className="mx-auto grid max-w-[1600px] items-start gap-4 p-4 sm:gap-6 sm:p-6 lg:grid-cols-[340px_minmax(0,1fr)]">
+        <div className="hidden self-start lg:sticky lg:top-6 lg:block">
+          <Controls {...controlsProps} />
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4 sm:gap-6">
           <div className="flex flex-col gap-3">
             <EditorToolbar
               language={settings.language}
@@ -227,7 +266,7 @@ function Home() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
               <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                 Preview · {settings.width}×{settings.height}
               </h2>

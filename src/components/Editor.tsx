@@ -125,8 +125,8 @@ export function Editor({
 
   return (
     <div
-      className="relative flex w-full overflow-hidden rounded-xl border border-white/10"
-      style={{ height: 320, backgroundColor: windowColor }}
+      className="relative flex h-56 w-full overflow-hidden rounded-xl border border-white/10 sm:h-72 lg:h-80"
+      style={{ backgroundColor: windowColor }}
     >
       <div
         className="relative h-full shrink-0 overflow-hidden border-r border-white/5"
