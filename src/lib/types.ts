@@ -1,13 +1,65 @@
 export type Language =
+  // web
   | 'ts'
   | 'tsx'
   | 'js'
   | 'jsx'
-  | 'json'
   | 'html'
   | 'css'
-  | 'bash'
+  | 'scss'
+  | 'vue'
+  | 'svelte'
+  | 'astro'
+  // data / docs
+  | 'json'
+  | 'yaml'
+  | 'toml'
+  | 'xml'
   | 'md'
+  | 'graphql'
+  | 'sql'
+  // shell / infra
+  | 'bash'
+  | 'powershell'
+  | 'docker'
+  | 'makefile'
+  | 'hcl'
+  // systems
+  | 'c'
+  | 'cpp'
+  | 'rust'
+  | 'go'
+  | 'zig'
+  | 'nim'
+  // jvm
+  | 'java'
+  | 'kotlin'
+  | 'scala'
+  | 'clojure'
+  | 'groovy'
+  // .net
+  | 'csharp'
+  | 'fsharp'
+  // functional
+  | 'haskell'
+  | 'ocaml'
+  | 'elm'
+  | 'purescript'
+  | 'rescript'
+  | 'erlang'
+  | 'elixir'
+  // scripting
+  | 'python'
+  | 'ruby'
+  | 'lua'
+  | 'perl'
+  | 'php'
+  // other
+  | 'swift'
+  | 'dart'
+  | 'r'
+  | 'julia'
+  | 'solidity'
 
 export type Theme =
   | 'one-dark-pro'
@@ -177,15 +229,58 @@ export const APPEARANCE_PRESETS: ReadonlyArray<AppearancePreset> = [
 ]
 
 export const LANGUAGES: ReadonlyArray<{ value: Language; label: string }> = [
+  { value: 'astro', label: 'Astro' },
+  { value: 'bash', label: 'Bash' },
+  { value: 'c', label: 'C' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'csharp', label: 'C#' },
+  { value: 'clojure', label: 'Clojure' },
+  { value: 'css', label: 'CSS' },
+  { value: 'dart', label: 'Dart' },
+  { value: 'docker', label: 'Dockerfile' },
+  { value: 'elixir', label: 'Elixir' },
+  { value: 'elm', label: 'Elm' },
+  { value: 'erlang', label: 'Erlang' },
+  { value: 'fsharp', label: 'F#' },
+  { value: 'go', label: 'Go' },
+  { value: 'graphql', label: 'GraphQL' },
+  { value: 'groovy', label: 'Groovy' },
+  { value: 'haskell', label: 'Haskell' },
+  { value: 'hcl', label: 'Terraform / HCL' },
+  { value: 'html', label: 'HTML' },
+  { value: 'java', label: 'Java' },
+  { value: 'js', label: 'JavaScript' },
+  { value: 'json', label: 'JSON' },
+  { value: 'jsx', label: 'JSX' },
+  { value: 'julia', label: 'Julia' },
+  { value: 'kotlin', label: 'Kotlin' },
+  { value: 'lua', label: 'Lua' },
+  { value: 'makefile', label: 'Makefile' },
+  { value: 'md', label: 'Markdown' },
+  { value: 'nim', label: 'Nim' },
+  { value: 'ocaml', label: 'OCaml' },
+  { value: 'perl', label: 'Perl' },
+  { value: 'php', label: 'PHP' },
+  { value: 'powershell', label: 'PowerShell' },
+  { value: 'purescript', label: 'PureScript' },
+  { value: 'python', label: 'Python' },
+  { value: 'r', label: 'R' },
+  { value: 'rescript', label: 'ReScript' },
+  { value: 'ruby', label: 'Ruby' },
+  { value: 'rust', label: 'Rust' },
+  { value: 'scala', label: 'Scala' },
+  { value: 'scss', label: 'SCSS' },
+  { value: 'solidity', label: 'Solidity' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'svelte', label: 'Svelte' },
+  { value: 'swift', label: 'Swift' },
+  { value: 'toml', label: 'TOML' },
   { value: 'ts', label: 'TypeScript' },
   { value: 'tsx', label: 'TSX' },
-  { value: 'js', label: 'JavaScript' },
-  { value: 'jsx', label: 'JSX' },
-  { value: 'json', label: 'JSON' },
-  { value: 'html', label: 'HTML' },
-  { value: 'css', label: 'CSS' },
-  { value: 'bash', label: 'Bash' },
-  { value: 'md', label: 'Markdown' },
+  { value: 'vue', label: 'Vue' },
+  { value: 'xml', label: 'XML' },
+  { value: 'yaml', label: 'YAML' },
+  { value: 'zig', label: 'Zig' },
 ]
 
 export const THEMES: ReadonlyArray<{

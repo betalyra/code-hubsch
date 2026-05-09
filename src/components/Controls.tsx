@@ -49,6 +49,11 @@ import {
   type Theme,
 } from '#/lib/types'
 
+interface DetectionHint {
+  language: Language
+  confidence: number
+}
+
 interface Props {
   settings: Settings
   onChange: (patch: Partial<Settings>) => void
@@ -59,6 +64,7 @@ interface Props {
   onDownloadSvg: () => void
   rendering: boolean
   pageCount: number
+  detected?: DetectionHint
 }
 
 const Section = ({
@@ -201,6 +207,7 @@ export function Controls({
   onDownloadSvg,
   rendering,
   pageCount,
+  detected,
 }: Props) {
   const [advancedOpen, setAdvancedOpen] = useState(false)
   const multi = pageCount > 1
@@ -321,6 +328,21 @@ export function Controls({
               ))}
             </SelectContent>
           </Select>
+          {detected &&
+            detected.language !== settings.language &&
+            detected.confidence > 0.05 && (
+              <button
+                type="button"
+                onClick={() => onChange({ language: detected.language })}
+                className="self-start text-[10px] text-muted-foreground transition-colors hover:text-primary"
+              >
+                Detected:{' '}
+                <span className="text-foreground">
+                  {LANGUAGES.find((l) => l.value === detected.language)?.label}
+                </span>{' '}
+                — apply
+              </button>
+            )}
         </div>
 
         <div className="grid grid-cols-2 gap-2">

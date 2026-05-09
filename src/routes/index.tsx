@@ -5,6 +5,7 @@ import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
 import { Preview } from '#/components/Preview'
 import { Separator } from '#/components/ui/separator'
+import { type Detection, detectLanguage } from '#/lib/detect'
 import {
   copyPngToClipboard,
   copySvgToClipboard,
@@ -63,6 +64,14 @@ function Home() {
   const [hydrated, setHydrated] = useState(false)
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
   const [busy, setBusy] = useState(false)
+  const [detected, setDetected] = useState<Detection | undefined>(undefined)
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDetected(detectLanguage(settings.code))
+    }, 400)
+    return () => clearTimeout(t)
+  }, [settings.code])
 
   useEffect(() => {
     setSettings(loadSettings(INITIAL))
@@ -187,6 +196,7 @@ function Home() {
             onDownloadSvg={handleSvgDownload}
             rendering={busy || pages.length === 0}
             pageCount={pages.length}
+            detected={detected}
           />
         </div>
 
