@@ -15,6 +15,7 @@ import {
   RiResetLeftLine,
   RiSubtractLine,
 } from 'react-icons/ri'
+import { LanguageCombobox } from '#/components/LanguageCombobox'
 import { Button } from '#/components/ui/button'
 import {
   Collapsible,
@@ -313,21 +314,10 @@ export function Controls({
 
         <div className="flex flex-col gap-1.5">
           <FieldLabel label="Language" />
-          <Select
+          <LanguageCombobox
             value={settings.language}
-            onValueChange={(v) => onChange({ language: v as Language })}
-          >
-            <SelectTrigger size="sm" className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {LANGUAGES.map((t) => (
-                <SelectItem key={t.value} value={t.value}>
-                  {t.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            onChange={(language) => onChange({ language })}
+          />
           {detected &&
             detected.language !== settings.language &&
             detected.confidence > 0.05 && (
