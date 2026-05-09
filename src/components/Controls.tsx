@@ -13,6 +13,7 @@ import {
   RiSubtractLine,
   RiWindow2Line,
 } from 'react-icons/ri'
+import { SizePresetCombobox } from '#/components/SizePresetCombobox'
 import {
   Accordion,
   AccordionContent,
@@ -40,7 +41,6 @@ import {
   type CodeFont,
   defaultHighlightFor,
   GRADIENT_PRESETS,
-  SIZE_PRESETS,
   type Settings,
   THEMES,
   type Theme,
@@ -197,11 +197,6 @@ export function Controls({
   proposedFilename,
 }: Props) {
   const multi = pageCount > 1
-
-  const sizePresetId =
-    SIZE_PRESETS.find(
-      (p) => p.width === settings.width && p.height === settings.height,
-    )?.id ?? ''
 
   const appearanceId =
     APPEARANCE_PRESETS.find(
@@ -611,29 +606,11 @@ export function Controls({
             <SectionTitle icon={<RiLayoutGridLine />} title="Canvas" />
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-3">
-            <ToggleGroup
-              type="single"
-              spacing={1}
-              value={sizePresetId}
-              onValueChange={(id) => {
-                if (!id) return
-                const p = SIZE_PRESETS.find((x) => x.id === id)
-                if (p) onChange({ width: p.width, height: p.height })
-              }}
-              className="grid w-full grid-cols-2 gap-1.5"
-            >
-              {SIZE_PRESETS.map((p) => (
-                <ToggleGroupItem
-                  key={p.id}
-                  value={p.id}
-                  size="sm"
-                  variant="outline"
-                  className="h-9 text-xs"
-                >
-                  {p.label}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
+            <SizePresetCombobox
+              width={settings.width}
+              height={settings.height}
+              onChange={({ width, height }) => onChange({ width, height })}
+            />
 
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1.5">

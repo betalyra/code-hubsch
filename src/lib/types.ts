@@ -131,15 +131,61 @@ export interface Settings {
 export interface SizePreset {
   readonly id: string
   readonly label: string
+  readonly description: string
+  readonly aspect: string
   readonly width: number
   readonly height: number
 }
 
 export const SIZE_PRESETS: ReadonlyArray<SizePreset> = [
-  { id: '1600x900', label: '1600×900', width: 1600, height: 900 },
-  { id: '1200x675', label: '1200×675', width: 1200, height: 675 },
-  { id: '1080', label: '1080²', width: 1080, height: 1080 },
-  { id: 'og', label: 'OG 1200×630', width: 1200, height: 630 },
+  {
+    id: '1600x900',
+    label: '1600 × 900',
+    description: 'Twitter / X post',
+    aspect: '16:9',
+    width: 1600,
+    height: 900,
+  },
+  {
+    id: '1200x675',
+    label: '1200 × 675',
+    description: 'Twitter / X post (compact)',
+    aspect: '16:9',
+    width: 1200,
+    height: 675,
+  },
+  {
+    id: 'square-1080',
+    label: '1080 × 1080',
+    description: 'Instagram / LinkedIn square',
+    aspect: '1:1',
+    width: 1080,
+    height: 1080,
+  },
+  {
+    id: 'link-card',
+    label: '1200 × 630',
+    description: 'Link card / OG image',
+    aspect: '1.91:1',
+    width: 1200,
+    height: 630,
+  },
+  {
+    id: 'portrait-1080x1350',
+    label: '1080 × 1350',
+    description: 'Instagram portrait',
+    aspect: '4:5',
+    width: 1080,
+    height: 1350,
+  },
+  {
+    id: 'story-1080x1920',
+    label: '1080 × 1920',
+    description: 'Story / Reel / Short',
+    aspect: '9:16',
+    width: 1080,
+    height: 1920,
+  },
 ]
 
 export interface AppearancePreset {

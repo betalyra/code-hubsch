@@ -109,6 +109,10 @@ export function Editor({
     }
   }
 
+  const handlePaste = (): void => {
+    if (highlightedLines !== '') onHighlightChange('')
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === 'Tab') {
       e.preventDefault()
@@ -249,6 +253,7 @@ export function Editor({
           onChange={(e) => onChange(e.target.value)}
           onScroll={handleScroll}
           onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
           spellCheck={false}
           autoCorrect="off"
           autoCapitalize="off"

@@ -12,11 +12,13 @@ interface Props {
 
 const DEBOUNCE_MS = 200
 
-const responsiveSvg = (svg: string): string =>
-  svg.replace(
-    /<svg([^>]*?)>/,
-    '<svg$1 style="width:100%;height:auto;display:block">',
-  )
+const fitSvg = (svg: string): string =>
+  svg.replace(/<svg([^>]*)>/, (_match, attrs: string) => {
+    const cleaned = attrs
+      .replace(/\swidth="[^"]*"/, '')
+      .replace(/\sheight="[^"]*"/, '')
+    return `<svg${cleaned} width="100%" height="100%" style="display:block">`
+  })
 
 export function Preview({ settings, view, onPages }: Props) {
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
@@ -66,8 +68,12 @@ export function Preview({ settings, view, onPages }: Props) {
               )}
               {isFit ? (
                 <div
+                  className="w-full"
+                  style={{
+                    aspectRatio: `${page.width} / ${page.height}`,
+                  }}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
-                  dangerouslySetInnerHTML={{ __html: responsiveSvg(page.svg) }}
+                  dangerouslySetInnerHTML={{ __html: fitSvg(page.svg) }}
                 />
               ) : (
                 <div className="scroll-overlay w-full overflow-x-auto">
