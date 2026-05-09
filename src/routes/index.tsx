@@ -1,12 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { RiSparkling2Line } from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
 import { Preview } from '#/components/Preview'
 import { Separator } from '#/components/ui/separator'
-import { downloadPagesZip, downloadPng, downloadSvg } from '#/lib/download'
+import {
+  copyPngToClipboard,
+  copySvgToClipboard,
+  downloadPagesZip,
+  downloadPng,
+  downloadSvg,
+} from '#/lib/download'
 import type { Page } from '#/lib/render'
+import { clearSettings, loadSettings, saveSettings } from '#/lib/storage'
 import type { Settings } from '#/lib/types'
 
 export const Route = createFileRoute('/')({ component: Home })
@@ -29,21 +36,43 @@ const INITIAL: Settings = {
   codeFont: 'IBM Plex Mono',
   width: 1200,
   height: 675,
+  autoHeight: false,
   fontSize: 26,
   lineHeight: 1.45,
   paddingX: 56,
   paddingY: 44,
-  background: '#0b0f14',
+  background: '#00c9ff',
+  backgroundSecondary: '#92fe9d',
+  backgroundType: 'linear',
+  gradientAngle: 135,
   transparentBackground: false,
   windowColor: '#1f2430',
   chrome: true,
+  chromeStyle: 'macos',
+  filename: '',
   radius: 18,
+  outerMargin: 50,
+  windowShadow: 50,
+  lineNumbers: false,
+  highlightedLines: '',
+  highlightColor: '#63c4ff',
 }
 
 function Home() {
   const [settings, setSettings] = useState<Settings>(INITIAL)
+  const [hydrated, setHydrated] = useState(false)
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
   const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    setSettings(loadSettings(INITIAL))
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
+    saveSettings(settings)
+  }, [settings, hydrated])
 
   const update = useCallback(
     (patch: Partial<Settings>) =>
@@ -55,7 +84,35 @@ function Home() {
     setPages(next)
   }, [])
 
-  const handleReset = useCallback(() => setSettings(INITIAL), [])
+  const handleReset = useCallback(() => {
+    clearSettings()
+    setSettings(INITIAL)
+  }, [])
+
+  const handleCopyPng = useCallback(async () => {
+    if (pages.length === 0) return
+    const page = pages[0]
+    if (!page) return
+    setBusy(true)
+    try {
+      await copyPngToClipboard(page.svg, page.width, page.height)
+    } catch (e) {
+      console.error('Copy failed', e)
+    } finally {
+      setBusy(false)
+    }
+  }, [pages])
+
+  const handleCopySvg = useCallback(async () => {
+    if (pages.length === 0) return
+    const page = pages[0]
+    if (!page) return
+    try {
+      await copySvgToClipboard(page.svg)
+    } catch (e) {
+      console.error('Copy failed', e)
+    }
+  }, [pages])
 
   const handlePng = useCallback(async () => {
     if (pages.length === 0) return
@@ -64,13 +121,15 @@ function Home() {
       if (pages.length === 1) {
         const page = pages[0]
         if (page) {
-          await downloadPng(page.svg, settings.width, settings.height, 'code.png')
+          await downloadPng(page.svg, page.width, page.height, 'code.png')
         }
       } else {
+        const first = pages[0]
+        if (!first) return
         await downloadPagesZip(
           pages.map((p) => p.svg),
-          settings.width,
-          settings.height,
+          first.width,
+          first.height,
           'png',
           'code.zip',
         )
@@ -78,7 +137,7 @@ function Home() {
     } finally {
       setBusy(false)
     }
-  }, [pages, settings.width, settings.height])
+  }, [pages])
 
   const handleSvgDownload = useCallback(async () => {
     if (pages.length === 0) return
@@ -88,10 +147,12 @@ function Home() {
         const page = pages[0]
         if (page) downloadSvg(page.svg, 'code.svg')
       } else {
+        const first = pages[0]
+        if (!first) return
         await downloadPagesZip(
           pages.map((p) => p.svg),
-          settings.width,
-          settings.height,
+          first.width,
+          first.height,
           'svg',
           'code.zip',
         )
@@ -99,7 +160,7 @@ function Home() {
     } finally {
       setBusy(false)
     }
-  }, [pages, settings.width, settings.height])
+  }, [pages])
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -120,6 +181,8 @@ function Home() {
             settings={settings}
             onChange={update}
             onReset={handleReset}
+            onCopyPng={handleCopyPng}
+            onCopySvg={handleCopySvg}
             onDownloadPng={handlePng}
             onDownloadSvg={handleSvgDownload}
             rendering={busy || pages.length === 0}
@@ -141,7 +204,12 @@ function Home() {
               lineHeight={settings.lineHeight}
               windowColor={settings.windowColor}
               fallbackColor="#d6deeb"
+              highlightedLines={settings.highlightedLines}
+              highlightColor={settings.highlightColor}
               onChange={(code) => update({ code })}
+              onHighlightChange={(highlightedLines) =>
+                update({ highlightedLines })
+              }
             />
           </div>
 

@@ -9,12 +9,6 @@ interface Props {
 
 const DEBOUNCE_MS = 200
 
-const responsiveSvg = (svg: string): string =>
-  svg.replace(
-    /<svg([^>]*?)>/,
-    '<svg$1 style="width:100%;height:auto;display:block">',
-  )
-
 export function Preview({ settings, onPages }: Props) {
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
   const [error, setError] = useState<string | undefined>(undefined)
@@ -46,27 +40,30 @@ export function Preview({ settings, onPages }: Props) {
   }, [settings, onPages])
 
   return (
-    <div
-      className="relative flex w-full flex-col gap-3"
-      style={{ maxWidth: settings.width }}
-    >
+    <div className="relative flex w-full flex-col gap-3">
       {pages.length > 0 ? (
         pages.map((page) => (
-          <div key={page.pageIndex} className="relative">
+          <div
+            key={page.pageIndex}
+            className="relative w-full overflow-hidden rounded-md"
+          >
             {pages.length > 1 && (
-              <div className="pointer-events-none absolute -top-2 -right-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground tabular-nums shadow">
+              <div className="pointer-events-none absolute top-2 right-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground tabular-nums shadow">
                 {page.pageIndex + 1}/{pages.length}
               </div>
             )}
-            <div
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
-              dangerouslySetInnerHTML={{ __html: responsiveSvg(page.svg) }}
-            />
+            <div className="scroll-overlay w-full overflow-x-auto">
+              <div
+                style={{ width: page.width, height: page.height }}
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
+                dangerouslySetInnerHTML={{ __html: page.svg }}
+              />
+            </div>
           </div>
         ))
       ) : (
         <div
-          className="flex w-full items-center justify-center text-muted-foreground"
+          className="flex w-full max-w-full items-center justify-center text-muted-foreground"
           style={{
             aspectRatio: `${settings.width} / ${settings.height}`,
             backgroundColor: settings.windowColor,

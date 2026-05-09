@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   RiAddLine,
   RiArrowDownSLine,
+  RiClipboardLine,
   RiContrast2Line,
   RiDownload2Line,
   RiEqualizer2Line,
@@ -9,6 +10,7 @@ import {
   RiFontSize,
   RiImageLine,
   RiLayoutGridLine,
+  RiMarkPenLine,
   RiPaletteLine,
   RiResetLeftLine,
   RiSubtractLine,
@@ -32,8 +34,13 @@ import { Switch } from '#/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
 import {
   APPEARANCE_PRESETS,
+  type BackgroundType,
+  CHROME_STYLES,
+  type ChromeStyle,
   CODE_FONTS,
   type CodeFont,
+  defaultHighlightFor,
+  GRADIENT_PRESETS,
   LANGUAGES,
   type Language,
   SIZE_PRESETS,
@@ -46,6 +53,8 @@ interface Props {
   settings: Settings
   onChange: (patch: Partial<Settings>) => void
   onReset: () => void
+  onCopyPng: () => void
+  onCopySvg: () => void
   onDownloadPng: () => void
   onDownloadSvg: () => void
   rendering: boolean
@@ -131,8 +140,10 @@ const SliderInput = ({
   precision = 0,
   onChange,
 }: SliderInputProps) => {
-  const dec = () => onChange(Math.max(min, Number((value - step).toFixed(precision))))
-  const inc = () => onChange(Math.min(max, Number((value + step).toFixed(precision))))
+  const dec = () =>
+    onChange(Math.max(min, Number((value - step).toFixed(precision))))
+  const inc = () =>
+    onChange(Math.min(max, Number((value + step).toFixed(precision))))
   return (
     <div className="flex flex-col gap-1.5">
       <FieldLabel label={label} value={`${value.toFixed(precision)}${unit}`} />
@@ -184,15 +195,15 @@ export function Controls({
   settings,
   onChange,
   onReset,
+  onCopyPng,
+  onCopySvg,
   onDownloadPng,
   onDownloadSvg,
   rendering,
   pageCount,
 }: Props) {
-  const multi = pageCount > 1
-  const pngLabel = multi ? `PNG · ${pageCount} pages` : 'PNG'
-  const svgLabel = multi ? `SVG · ${pageCount} pages` : 'SVG'
   const [advancedOpen, setAdvancedOpen] = useState(false)
+  const multi = pageCount > 1
 
   const sizePresetId =
     SIZE_PRESETS.find(
@@ -204,8 +215,32 @@ export function Controls({
       (p) =>
         p.theme === settings.theme &&
         p.windowColor.toLowerCase() === settings.windowColor.toLowerCase() &&
-        p.background.toLowerCase() === settings.background.toLowerCase(),
+        p.background.toLowerCase() === settings.background.toLowerCase() &&
+        settings.backgroundType === 'solid',
     )?.id ?? ''
+
+  const gradientId =
+    settings.backgroundType !== 'solid'
+      ? GRADIENT_PRESETS.find(
+          (g) =>
+            g.from.toLowerCase() === settings.background.toLowerCase() &&
+            g.to.toLowerCase() === settings.backgroundSecondary.toLowerCase(),
+        )?.id ?? ''
+      : ''
+
+  const applyGradientPreset = (id: string) => {
+    const g = GRADIENT_PRESETS.find((x) => x.id === id)
+    if (!g) return
+    onChange({
+      backgroundType: 'linear',
+      background: g.from,
+      backgroundSecondary: g.to,
+      gradientAngle: g.angle,
+      transparentBackground: false,
+      outerMargin: Math.max(settings.outerMargin, 64),
+      windowShadow: Math.max(settings.windowShadow, 50),
+    })
+  }
 
   return (
     <aside className="flex w-full flex-col gap-4 rounded-xl border bg-card/40 p-4">
@@ -222,7 +257,10 @@ export function Controls({
                 theme: p.theme,
                 windowColor: p.windowColor,
                 background: p.background,
+                backgroundSecondary: p.background,
+                backgroundType: 'solid',
                 transparentBackground: false,
+                highlightColor: defaultHighlightFor(p.theme),
               })
             }
           }}
@@ -245,7 +283,13 @@ export function Controls({
           <FieldLabel label="Syntax theme" />
           <Select
             value={settings.theme}
-            onValueChange={(v) => onChange({ theme: v as Theme })}
+            onValueChange={(v) => {
+              const theme = v as Theme
+              onChange({
+                theme,
+                highlightColor: defaultHighlightFor(theme),
+              })
+            }}
           >
             <SelectTrigger size="sm" className="w-full">
               <SelectValue />
@@ -296,6 +340,112 @@ export function Controls({
             />
           </div>
         </div>
+
+        <div className="flex flex-col gap-1.5">
+          <FieldLabel label="Background style" />
+          <ToggleGroup
+            type="single"
+            spacing={0}
+            value={settings.backgroundType}
+            onValueChange={(v) => {
+              if (!v) return
+              onChange({ backgroundType: v as BackgroundType })
+            }}
+            className="grid w-full grid-cols-3"
+          >
+            <ToggleGroupItem
+              value="solid"
+              size="sm"
+              variant="outline"
+              className="h-7 text-[11px]"
+            >
+              Solid
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="linear"
+              size="sm"
+              variant="outline"
+              className="h-7 text-[11px]"
+            >
+              Linear
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="radial"
+              size="sm"
+              variant="outline"
+              className="h-7 text-[11px]"
+            >
+              Radial
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+
+        {settings.backgroundType !== 'solid' && (
+          <>
+            <div className="flex flex-col gap-1.5">
+              <FieldLabel label="Gradient presets" />
+              <div className="grid grid-cols-4 gap-1.5">
+                {GRADIENT_PRESETS.map((g) => {
+                  const active = gradientId === g.id
+                  return (
+                    <button
+                      key={g.id}
+                      type="button"
+                      title={g.label}
+                      onClick={() => applyGradientPreset(g.id)}
+                      className={`h-8 rounded-md border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-105'}`}
+                      style={{
+                        backgroundImage: `linear-gradient(${g.angle}deg, ${g.from}, ${g.to})`,
+                      }}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <FieldLabel label="Secondary color" />
+              <ColorField
+                value={settings.backgroundSecondary}
+                onChange={(backgroundSecondary) =>
+                  onChange({ backgroundSecondary })
+                }
+                disabled={settings.transparentBackground}
+              />
+            </div>
+          </>
+        )}
+
+        {settings.backgroundType === 'linear' && (
+          <SliderInput
+            label="Gradient angle"
+            value={settings.gradientAngle}
+            min={0}
+            max={360}
+            step={5}
+            unit="°"
+            onChange={(gradientAngle) => onChange({ gradientAngle })}
+          />
+        )}
+
+        <SliderInput
+          label="Padding around window"
+          value={settings.outerMargin}
+          min={0}
+          max={200}
+          step={2}
+          unit="px"
+          onChange={(outerMargin) => onChange({ outerMargin })}
+        />
+
+        <SliderInput
+          label="Window shadow"
+          value={settings.windowShadow}
+          min={0}
+          max={100}
+          step={1}
+          onChange={(windowShadow) => onChange({ windowShadow })}
+        />
 
         <div className="flex flex-col gap-2 rounded-md border bg-input/20 p-2.5">
           <label className="flex cursor-pointer items-center justify-between text-xs">
@@ -372,8 +522,39 @@ export function Controls({
                 if (Number.isFinite(n)) onChange({ height: n })
               }}
               className="h-7 text-xs tabular-nums"
+              disabled={settings.autoHeight}
             />
           </div>
+        </div>
+
+        <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+          <span>Auto-fit height to code</span>
+          <Switch
+            checked={settings.autoHeight}
+            onCheckedChange={(autoHeight) => onChange({ autoHeight })}
+          />
+        </label>
+      </Section>
+
+      <Section icon={<RiMarkPenLine />} title="Highlight">
+        <div className="flex flex-col gap-1">
+          <FieldLabel label="Lines" />
+          <Input
+            placeholder="e.g. 3, 5-7"
+            value={settings.highlightedLines}
+            onChange={(e) => onChange({ highlightedLines: e.target.value })}
+            className="h-7 text-xs tabular-nums"
+          />
+          <span className="text-[10px] text-muted-foreground">
+            Type ranges or click bubbles in the editor.
+          </span>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <FieldLabel label="Color" />
+          <ColorField
+            value={settings.highlightColor}
+            onChange={(highlightColor) => onChange({ highlightColor })}
+          />
         </div>
       </Section>
 
@@ -427,6 +608,32 @@ export function Controls({
           <RiArrowDownSLine className="text-base transition-transform group-data-[state=open]:rotate-180" />
         </CollapsibleTrigger>
         <CollapsibleContent className="mt-3 flex flex-col gap-3">
+          <div className="flex flex-col gap-1.5">
+            <FieldLabel label="Window style" />
+            <ToggleGroup
+              type="single"
+              spacing={0}
+              value={settings.chromeStyle}
+              onValueChange={(v) => {
+                if (!v) return
+                onChange({ chromeStyle: v as ChromeStyle })
+              }}
+              className="grid w-full grid-cols-3"
+            >
+              {CHROME_STYLES.map((s) => (
+                <ToggleGroupItem
+                  key={s.value}
+                  value={s.value}
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-[11px]"
+                >
+                  {s.label}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
+
           <SliderInput
             label="Padding X"
             value={settings.paddingX}
@@ -454,11 +661,41 @@ export function Controls({
             unit="px"
             onChange={(radius) => onChange({ radius })}
           />
+
+          <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+            <span>Show line numbers</span>
+            <Switch
+              checked={settings.lineNumbers}
+              onCheckedChange={(lineNumbers) => onChange({ lineNumbers })}
+            />
+          </label>
         </CollapsibleContent>
       </Collapsible>
 
       <Section icon={<RiDownload2Line />} title="Export">
+        {settings.chrome && (
+          <div className="flex flex-col gap-1">
+            <FieldLabel label="Filename in chrome" />
+            <Input
+              placeholder="tweet.ts"
+              value={settings.filename}
+              onChange={(e) => onChange({ filename: e.target.value })}
+              className="h-7 text-xs"
+            />
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-1.5">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            disabled={rendering || multi}
+            onClick={onCopyPng}
+            title={multi ? 'Copy is for single images only' : undefined}
+          >
+            <RiClipboardLine data-icon="inline-start" />
+            Copy PNG
+          </Button>
           <Button
             type="button"
             size="sm"
@@ -466,17 +703,27 @@ export function Controls({
             onClick={onDownloadPng}
           >
             <RiImageLine data-icon="inline-start" />
-            {pngLabel}
+            {multi ? `PNG · ${pageCount}` : 'PNG'}
           </Button>
           <Button
             type="button"
             size="sm"
             variant="outline"
+            disabled={rendering || multi}
+            onClick={onCopySvg}
+            title={multi ? 'Copy is for single images only' : undefined}
+          >
+            <RiClipboardLine data-icon="inline-start" />
+            Copy SVG
+          </Button>
+          <Button
+            type="button"
+            size="sm"
             disabled={rendering}
             onClick={onDownloadSvg}
           >
             <RiFileCodeLine data-icon="inline-start" />
-            {svgLabel}
+            {multi ? `SVG · ${pageCount}` : 'SVG'}
           </Button>
         </div>
         <Button

@@ -90,3 +90,30 @@ body {
 button {
   cursor: pointer;
 }
+
+.scroll-overlay {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.scroll-overlay:hover,
+.scroll-overlay:focus-within,
+.scroll-overlay:active {
+  scrollbar-color: oklch(1 0 0 / 25%) transparent;
+}
+.scroll-overlay::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scroll-overlay::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-overlay::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+.scroll-overlay:hover::-webkit-scrollbar-thumb,
+.scroll-overlay:focus-within::-webkit-scrollbar-thumb,
+.scroll-overlay:active::-webkit-scrollbar-thumb {
+  background-color: oklch(1 0 0 / 25%);
+}

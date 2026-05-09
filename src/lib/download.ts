@@ -49,6 +49,27 @@ export const downloadSvg = (svg: string, filename = 'code.svg'): void => {
   triggerDownload(blob, filename)
 }
 
+export const copySvgToClipboard = async (svg: string): Promise<void> => {
+  if (!navigator.clipboard?.writeText) {
+    throw new Error('Clipboard text API not supported in this browser')
+  }
+  await navigator.clipboard.writeText(svg)
+}
+
+export const copyPngToClipboard = async (
+  svg: string,
+  width: number,
+  height: number,
+  scale = 2,
+): Promise<void> => {
+  if (typeof ClipboardItem === 'undefined' || !navigator.clipboard?.write) {
+    throw new Error('Clipboard image API not supported in this browser')
+  }
+  const bytes = await svgToPngBytes(svg, width, height, scale)
+  const blob = new Blob([new Uint8Array(bytes).buffer], { type: 'image/png' })
+  await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+}
+
 export const downloadPng = async (
   svg: string,
   width: number,
