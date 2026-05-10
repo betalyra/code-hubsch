@@ -88,15 +88,96 @@ export type TokenLine = ReadonlyArray<Token>
 
 export type BackgroundType = 'solid' | 'linear' | 'radial'
 
-export type ChromeStyle = 'macos' | 'windows' | 'minimal'
+export type ChromeStyle = 'macos' | 'minimal' | 'windows' | 'win95'
 
-export const CHROME_STYLES: ReadonlyArray<{
-  value: ChromeStyle
-  label: string
-}> = [
-  { value: 'macos', label: 'macOS' },
-  { value: 'windows', label: 'Windows' },
-  { value: 'minimal', label: 'Minimal' },
+export interface ChromeStylePreset {
+  readonly value: ChromeStyle
+  readonly label: string
+  readonly description: string
+}
+
+export const CHROME_STYLES: ReadonlyArray<ChromeStylePreset> = [
+  {
+    value: 'macos',
+    label: 'macOS',
+    description: 'Colored traffic lights, left',
+  },
+  {
+    value: 'minimal',
+    label: 'Minimal',
+    description: 'Subtle gray dots, left',
+  },
+  {
+    value: 'windows',
+    label: 'Windows 11',
+    description: 'Modern controls, right',
+  },
+  {
+    value: 'win95',
+    label: 'Windows 95',
+    description: 'Beveled retro controls',
+  },
+]
+
+// Preset patches applied when a chrome style is picked. Each entry is a
+// function that takes the current settings and returns the partial patch
+// to merge in. This lets a preset reference current values (e.g. set the
+// chromeColor to match the existing windowColor) and ensures every patch
+// resets every preset-related field so colours don't leak between styles.
+//
+// To add a new style: add to ChromeStyle union + CHROME_STYLES list, then
+// declare its patch builder here. Anything not returned is left untouched.
+export type ChromeStylePatch = Partial<{
+  radius: number
+  borderWidth: number
+  borderColor: string
+  chromeColor: string
+}>
+
+export const CHROME_STYLE_PATCHES: Record<
+  ChromeStyle,
+  (current: Settings) => ChromeStylePatch
+> = {
+  macos: (s) => ({
+    radius: 18,
+    borderWidth: 0,
+    chromeColor: s.windowColor,
+  }),
+  minimal: (s) => ({
+    radius: 18,
+    borderWidth: 0,
+    chromeColor: s.windowColor,
+  }),
+  windows: (s) => ({
+    radius: 10,
+    borderWidth: 0,
+    chromeColor: s.windowColor,
+  }),
+  win95: () => ({
+    radius: 0,
+    borderWidth: 2,
+    borderColor: '#808080',
+    chromeColor: '#0a246a',
+  }),
+}
+
+export interface ChromeColorPreset {
+  readonly id: string
+  readonly label: string
+  readonly hex: string
+}
+
+export const CHROME_COLOR_PRESETS: ReadonlyArray<ChromeColorPreset> = [
+  { id: 'black', label: 'Black', hex: '#0a0a0a' },
+  { id: 'slate', label: 'Slate', hex: '#1e293b' },
+  { id: 'charcoal', label: 'Charcoal', hex: '#27272a' },
+  { id: 'steel', label: 'Steel', hex: '#374151' },
+  { id: 'navy', label: 'Navy', hex: '#1e3a8a' },
+  { id: 'indigo', label: 'Indigo', hex: '#312e81' },
+  { id: 'plum', label: 'Plum', hex: '#581c87' },
+  { id: 'crimson', label: 'Crimson', hex: '#7f1d1d' },
+  { id: 'forest', label: 'Forest', hex: '#14532d' },
+  { id: 'cocoa', label: 'Cocoa', hex: '#3e2723' },
 ]
 
 export interface Settings {
@@ -117,12 +198,15 @@ export interface Settings {
   gradientAngle: number
   transparentBackground: boolean
   windowColor: string
+  chromeColor: string
   chrome: boolean
   chromeStyle: ChromeStyle
   filename: string
   radius: number
   outerMargin: number
   windowShadow: number
+  borderWidth: number
+  borderColor: string
   lineNumbers: boolean
   highlightedLines: string
   highlightColor: string

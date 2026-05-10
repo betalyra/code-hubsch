@@ -137,12 +137,14 @@ const MacosChrome = ({
   filenameColor,
   fontFamily,
   variant,
+  chromeColor,
 }: {
   height: number
   filename: string
   filenameColor: string
   fontFamily: string
   variant: 'color' | 'minimal'
+  chromeColor: string
 }) => {
   const dotStyle =
     variant === 'color'
@@ -165,7 +167,7 @@ const MacosChrome = ({
         paddingLeft: 18,
         paddingRight: 18,
         gap: 8,
-        backgroundColor: 'rgba(255,255,255,0.04)',
+        backgroundColor: chromeColor,
         flexShrink: 0,
       }}
     >
@@ -197,11 +199,13 @@ const WindowsChrome = ({
   filename,
   filenameColor,
   fontFamily,
+  chromeColor,
 }: {
   height: number
   filename: string
   filenameColor: string
   fontFamily: string
+  chromeColor: string
 }) => {
   const iconSize = Math.round(height * 0.4)
   const cellWidth = Math.round(height * 1.4)
@@ -212,7 +216,7 @@ const WindowsChrome = ({
         height,
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: 'rgba(255,255,255,0.04)',
+        backgroundColor: chromeColor,
         flexShrink: 0,
       }}
     >
@@ -305,12 +309,121 @@ const WindowsChrome = ({
   )
 }
 
+const Win95Chrome = ({
+  height,
+  filename,
+  fontFamily,
+  chromeColor,
+}: {
+  height: number
+  filename: string
+  fontFamily: string
+  chromeColor: string
+}) => {
+  const buttonSize = Math.round(height * 0.7)
+  const iconSize = Math.round(buttonSize * 0.55)
+  const buttonBg = '#c0c0c0'
+  const beveled = {
+    width: buttonSize,
+    height: buttonSize,
+    backgroundColor: buttonBg,
+    borderTopColor: '#ffffff',
+    borderLeftColor: '#ffffff',
+    borderRightColor: '#000000',
+    borderBottomColor: '#000000',
+    borderTopWidth: 2,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    borderBottomWidth: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  } as const
+  return (
+    <div
+      style={{
+        height,
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: chromeColor,
+        flexShrink: 0,
+        paddingLeft: 8,
+        paddingRight: 6,
+        gap: 6,
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          fontFamily,
+          fontSize: Math.max(11, Math.round(height * 0.42)),
+          color: '#ffffff',
+          fontWeight: 700,
+          letterSpacing: 0.2,
+        }}
+      >
+        {filename}
+      </div>
+      <div style={{ display: 'flex', gap: 2 }}>
+        <div style={beveled}>
+          <svg width={iconSize} height={iconSize} viewBox="0 0 12 12">
+            <line
+              x1="2"
+              y1="9"
+              x2="10"
+              y2="9"
+              stroke="#000000"
+              strokeWidth="1.6"
+            />
+          </svg>
+        </div>
+        <div style={beveled}>
+          <svg width={iconSize} height={iconSize} viewBox="0 0 12 12">
+            <rect
+              x="2"
+              y="2"
+              width="8"
+              height="8"
+              fill="none"
+              stroke="#000000"
+              strokeWidth="1.6"
+            />
+          </svg>
+        </div>
+        <div style={beveled}>
+          <svg width={iconSize} height={iconSize} viewBox="0 0 12 12">
+            <line
+              x1="2.5"
+              y1="2.5"
+              x2="9.5"
+              y2="9.5"
+              stroke="#000000"
+              strokeWidth="1.6"
+              strokeLinecap="square"
+            />
+            <line
+              x1="9.5"
+              y1="2.5"
+              x2="2.5"
+              y2="9.5"
+              stroke="#000000"
+              strokeWidth="1.6"
+              strokeLinecap="square"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const renderChrome = (
   style: ChromeStyle,
   height: number,
   filename: string,
   filenameColor: string,
   fontFamily: string,
+  chromeColor: string,
 ) => {
   if (style === 'windows') {
     return (
@@ -319,6 +432,17 @@ const renderChrome = (
         filename={filename}
         filenameColor={filenameColor}
         fontFamily={fontFamily}
+        chromeColor={chromeColor}
+      />
+    )
+  }
+  if (style === 'win95') {
+    return (
+      <Win95Chrome
+        height={height}
+        filename={filename}
+        fontFamily={fontFamily}
+        chromeColor={chromeColor}
       />
     )
   }
@@ -329,6 +453,7 @@ const renderChrome = (
       filenameColor={filenameColor}
       fontFamily={fontFamily}
       variant={style === 'minimal' ? 'minimal' : 'color'}
+      chromeColor={chromeColor}
     />
   )
 }
@@ -387,6 +512,7 @@ const renderOnePage = async ({
     paddingX,
     paddingY,
     windowColor,
+    chromeColor,
     chrome,
     chromeStyle,
     filename,
@@ -402,6 +528,18 @@ const renderOnePage = async ({
   const fallbackColor = '#d6deeb'
   const backgroundStyle = buildBackground(settings)
   const shadow = buildShadow(windowShadow)
+
+  const borderStyle =
+    settings.borderWidth > 0
+      ? {
+          borderColor: settings.borderColor,
+          borderStyle: 'solid' as const,
+          borderTopWidth: settings.borderWidth,
+          borderLeftWidth: settings.borderWidth,
+          borderRightWidth: settings.borderWidth,
+          borderBottomWidth: settings.borderWidth,
+        }
+      : {}
 
   const tree = (
     <div
@@ -423,6 +561,7 @@ const renderOnePage = async ({
           overflow: 'hidden',
           backgroundColor: windowColor,
           ...(shadow ? { boxShadow: shadow } : {}),
+          ...borderStyle,
         }}
       >
         {chrome &&
@@ -432,6 +571,7 @@ const renderOnePage = async ({
             filename,
             fallbackColor,
             codeFont,
+            chromeColor,
           )}
         <div
           style={{

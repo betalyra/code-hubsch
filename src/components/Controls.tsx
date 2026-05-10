@@ -13,6 +13,7 @@ import {
   RiSubtractLine,
   RiWindow2Line,
 } from 'react-icons/ri'
+import { ChromeStyleCombobox } from '#/components/ChromeStyleCombobox'
 import { SizePresetCombobox } from '#/components/SizePresetCombobox'
 import {
   Accordion,
@@ -35,8 +36,8 @@ import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
 import {
   APPEARANCE_PRESETS,
   type BackgroundType,
-  CHROME_STYLES,
-  type ChromeStyle,
+  CHROME_COLOR_PRESETS,
+  CHROME_STYLE_PATCHES,
   CODE_FONTS,
   type CodeFont,
   defaultHighlightFor,
@@ -524,28 +525,58 @@ export function Controls({
             {settings.chrome && (
               <div className="flex flex-col gap-1.5">
                 <FieldLabel label="Style" />
-                <ToggleGroup
-                  type="single"
-                  spacing={0}
+                <ChromeStyleCombobox
                   value={settings.chromeStyle}
-                  onValueChange={(v) => {
-                    if (!v) return
-                    onChange({ chromeStyle: v as ChromeStyle })
-                  }}
-                  className="grid w-full grid-cols-3"
-                >
-                  {CHROME_STYLES.map((s) => (
-                    <ToggleGroupItem
-                      key={s.value}
-                      value={s.value}
-                      size="sm"
-                      variant="outline"
-                      className="h-7 text-[11px]"
+                  onChange={(chromeStyle) =>
+                    onChange({
+                      chromeStyle,
+                      ...CHROME_STYLE_PATCHES[chromeStyle](settings),
+                    })
+                  }
+                />
+              </div>
+            )}
+
+            {settings.chrome && (
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">
+                    Chrome color
+                  </span>
+                  {settings.chromeColor.toLowerCase() !==
+                    settings.windowColor.toLowerCase() && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onChange({ chromeColor: settings.windowColor })
+                      }
+                      className="text-[10px] text-muted-foreground transition-colors hover:text-primary"
                     >
-                      {s.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
+                      Match window
+                    </button>
+                  )}
+                </div>
+                <ColorField
+                  value={settings.chromeColor}
+                  onChange={(chromeColor) => onChange({ chromeColor })}
+                />
+                <div className="grid grid-cols-5 gap-1.5">
+                  {CHROME_COLOR_PRESETS.map((c) => {
+                    const active =
+                      settings.chromeColor.toLowerCase() ===
+                      c.hex.toLowerCase()
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        title={c.label}
+                        onClick={() => onChange({ chromeColor: c.hex })}
+                        className={`h-6 rounded border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-110'}`}
+                        style={{ backgroundColor: c.hex }}
+                      />
+                    )
+                  })}
+                </div>
               </div>
             )}
 
@@ -577,6 +608,26 @@ export function Controls({
               unit="px"
               onChange={(radius) => onChange({ radius })}
             />
+
+            <SliderInput
+              label="Border width"
+              value={settings.borderWidth}
+              min={0}
+              max={8}
+              step={1}
+              unit="px"
+              onChange={(borderWidth) => onChange({ borderWidth })}
+            />
+
+            {settings.borderWidth > 0 && (
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel label="Border color" />
+                <ColorField
+                  value={settings.borderColor}
+                  onChange={(borderColor) => onChange({ borderColor })}
+                />
+              </div>
+            )}
 
             <SliderInput
               label="Inner padding X"
