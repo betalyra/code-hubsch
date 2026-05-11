@@ -533,9 +533,14 @@ const buildPageTree = ({
 
   // font-feature-settings is only meaningful on the HTML-in-Canvas path —
   // Satori silently ignores it. Explicitly setting "liga"/"calt" to 0
-  // disables ligatures in the live DOM render.
-  const featureSettings =
-    htmlInCanvas && ligatures ? '"liga" 1, "calt" 1' : '"liga" 0, "calt" 0'
+  // disables ligatures in the live DOM render. ss01–ss08 are needed for
+  // fonts (like Monaspace) that ship programming ligatures as stylistic
+  // sets rather than standard ligatures; fonts that don't have those
+  // features ignore the unknown tags.
+  const ligaOn =
+    '"liga" 1, "calt" 1, "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08"'
+  const ligaOff = '"liga" 0, "calt" 0'
+  const featureSettings = htmlInCanvas && ligatures ? ligaOn : ligaOff
 
   const borderStyle =
     settings.borderWidth > 0

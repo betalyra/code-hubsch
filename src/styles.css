@@ -4,16 +4,7 @@
 
 @import "@fontsource-variable/bricolage-grotesque";
 
-@import "@fontsource/ibm-plex-mono/400.css";
-@import "@fontsource/ibm-plex-mono/400-italic.css";
-@import "@fontsource/ibm-plex-mono/500.css";
-@import "@fontsource/jetbrains-mono/400.css";
-@import "@fontsource/jetbrains-mono/400-italic.css";
-@import "@fontsource/jetbrains-mono/500.css";
-@import "@fontsource/geist-mono/400.css";
-@import "@fontsource/geist-mono/500.css";
-@import "@fontsource/fira-code/400.css";
-@import "@fontsource/fira-code/500.css";
+/* Code fonts are registered lazily at runtime via FontFace API (src/lib/fonts.ts). */
 
 @theme inline {
   --font-sans:

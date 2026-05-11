@@ -19,7 +19,7 @@ interface Props {
   fallbackColor: string
   highlightedLines: string
   highlightColor: string
-  showLineNumbers: boolean
+  ligatures: boolean
   onChange: (code: string) => void
   onHighlightChange: (next: string) => void
 }
@@ -44,7 +44,7 @@ export function Editor({
   fallbackColor,
   highlightedLines,
   highlightColor,
-  showLineNumbers,
+  ligatures,
   onChange,
   onHighlightChange,
 }: Props) {
@@ -65,12 +65,26 @@ export function Editor({
   }, [code, language, theme])
 
   const fontFamily = useMemo(() => fontFamilyFor(codeFont), [codeFont])
+  const fontHasLigatures = useMemo(
+    () => CODE_FONTS.find((f) => f.value === codeFont)?.ligatures ?? false,
+    [codeFont],
+  )
+  // ss01–ss08 are needed for fonts (Monaspace family) that ship their
+  // programming ligatures as stylistic sets rather than `liga`/`calt`.
+  const fontFeatureSettings =
+    ligatures && fontHasLigatures
+      ? '"liga" 1, "calt" 1, "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08"'
+      : '"liga" 0, "calt" 0'
   const lineHeightPx = Math.round(fontSize * lineHeight)
   const padding = 20
   const lineCount = Math.max(code.split('\n').length, lines.length)
   const digits = Math.max(2, String(Math.max(1, lineCount)).length)
-  const lineNumberWidth = digits * 8 + 4
-  const gutterWidth = lineNumberWidth + 24 + 4
+  // Line-number column uses the same fontSize as the code so baselines
+  // align across the two columns. Width is glyph-count × half-em + a
+  // small right gutter.
+  const lineNumberWidth = Math.ceil(digits * fontSize * 0.6) + 8
+  const toggleWidth = 24
+  const gutterWidth = toggleWidth + lineNumberWidth + 4
 
   const highlightSet = useMemo(
     () => new Set(parseLineRanges(highlightedLines)),
@@ -93,6 +107,7 @@ export function Editor({
     border: 0,
     whiteSpace: 'pre',
     tabSize: 2,
+    fontFeatureSettings,
   }
 
   const handleScroll = (): void => {
@@ -135,7 +150,7 @@ export function Editor({
       <div
         className="relative h-full shrink-0 overflow-hidden border-r border-white/5"
         style={{
-          width: showLineNumbers ? gutterWidth : 36,
+          width: gutterWidth,
           paddingTop: padding,
         }}
       >
@@ -151,35 +166,24 @@ export function Editor({
               <div
                 // biome-ignore lint/suspicious/noArrayIndexKey: stable
                 key={i}
-                style={{ height: lineHeightPx, display: 'flex', alignItems: 'center' }}
+                style={{
+                  height: lineHeightPx,
+                  fontFamily,
+                  fontSize,
+                  lineHeight: `${lineHeightPx}px`,
+                }}
               >
-                {showLineNumbers && (
-                  <span
-                    style={{
-                      width: lineNumberWidth,
-                      paddingRight: 8,
-                      fontFamily,
-                      fontSize: Math.max(10, fontSize - 2),
-                      lineHeight: 1,
-                      color: fallbackColor,
-                      opacity: 0.45,
-                      textAlign: 'right',
-                    }}
-                    className="tabular-nums"
-                  >
-                    {ln}
-                  </span>
-                )}
                 <button
                   type="button"
                   aria-label={`toggle highlight for line ${ln}`}
                   onClick={() => toggleLine(ln)}
                   style={{
+                    width: toggleWidth,
                     height: lineHeightPx,
-                    width: 24,
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    verticalAlign: 'top',
                   }}
                   className="group/bubble"
                 >
@@ -192,6 +196,19 @@ export function Editor({
                     style={on ? { backgroundColor: highlightColor } : undefined}
                   />
                 </button>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: lineNumberWidth,
+                    paddingRight: 8,
+                    color: fallbackColor,
+                    opacity: 0.45,
+                    textAlign: 'right',
+                  }}
+                  className="tabular-nums"
+                >
+                  {ln}
+                </span>
               </div>
             )
           })}

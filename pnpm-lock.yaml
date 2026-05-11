@@ -14,16 +14,91 @@ importers:
       '@fontsource-variable/geist':
         specifier: ^5.2.8
         version: 5.2.8
+      '@fontsource/anonymous-pro':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/b612-mono':
+        specifier: ^5.2.7
+        version: 5.2.7
+      '@fontsource/commit-mono':
+        specifier: ^5.2.5
+        version: 5.2.5
+      '@fontsource/cousine':
+        specifier: ^5.2.7
+        version: 5.2.7
+      '@fontsource/dm-mono':
+        specifier: ^5.2.7
+        version: 5.2.7
       '@fontsource/fira-code':
+        specifier: ^5.2.7
+        version: 5.2.7
+      '@fontsource/fira-mono':
         specifier: ^5.2.7
         version: 5.2.7
       '@fontsource/geist-mono':
         specifier: ^5.2.7
         version: 5.2.7
+      '@fontsource/google-sans-code':
+        specifier: ^5.2.4
+        version: 5.2.4
       '@fontsource/ibm-plex-mono':
         specifier: ^5.2.7
         version: 5.2.7
+      '@fontsource/inconsolata':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/intel-one-mono':
+        specifier: ^5.2.2
+        version: 5.2.2
+      '@fontsource/iosevka':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@fontsource/jetbrains-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/kode-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/lilex':
+        specifier: ^5.2.1
+        version: 5.2.1
+      '@fontsource/maple-mono':
+        specifier: ^5.2.6
+        version: 5.2.6
+      '@fontsource/martian-mono':
+        specifier: ^5.2.7
+        version: 5.2.7
+      '@fontsource/monaspace-argon':
+        specifier: ^5.2.5
+        version: 5.2.5
+      '@fontsource/monaspace-krypton':
+        specifier: ^5.2.5
+        version: 5.2.5
+      '@fontsource/monaspace-neon':
+        specifier: ^5.2.5
+        version: 5.2.5
+      '@fontsource/overpass-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/red-hat-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/roboto-mono':
+        specifier: ^5.2.9
+        version: 5.2.9
+      '@fontsource/source-code-pro':
+        specifier: ^5.2.7
+        version: 5.2.7
+      '@fontsource/space-mono':
+        specifier: ^5.2.9
+        version: 5.2.9
+      '@fontsource/spline-sans-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/ubuntu-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/victor-mono':
         specifier: ^5.2.8
         version: 5.2.8
       '@tailwindcss/vite':
@@ -434,17 +509,92 @@ packages:
   '@fontsource-variable/geist@5.2.8':
     resolution: {integrity: sha512-cJ6m9e+8MQ5dCYJsLylfZrgBh6KkG4bOLckB35Tr9J/EqdkEM6QllH5PxqP1dhTvFup+HtMRPuz9xOjxXJggxw==}
 
+  '@fontsource/anonymous-pro@5.2.8':
+    resolution: {integrity: sha512-nCK3XLqSyTjWw94vtgaI5n8j+jsxz7Eds5S38il0DSZ+lBqs/O08m41iXqmm+i/pXqQb/KBxA6hck3hbozZQiA==}
+
+  '@fontsource/b612-mono@5.2.7':
+    resolution: {integrity: sha512-nIHFyzEhYQxkLW18njXzIbOD94g1fy0yboCLd3jLGd78kXwKP1uErTfdMDFljbt1FNzGyTxWphXeRqpWMjsI7g==}
+
+  '@fontsource/commit-mono@5.2.5':
+    resolution: {integrity: sha512-htX8yQWtiPt5L1Hzh4sirvfUJT2+KYiquDB/Q2sY2tWQYplpBUOD5zHnIM3k36Hnm4V+JIIqA/wmwupSQ68WjA==}
+
+  '@fontsource/cousine@5.2.7':
+    resolution: {integrity: sha512-2l6qNHghWeQDGqaR1QmS8iR1YWzhZczcVQpR/MJVNSKE8bELI6v2Rqe+d4pFfG+5PY9QhvZ+aKriqlbKubcR8g==}
+
+  '@fontsource/dm-mono@5.2.7':
+    resolution: {integrity: sha512-Ma1az2atTVgQWuOWwjuxx26p/6A6CU9HBNKq1CFV6YKpKhpswnf9ry9Ql4+T6bTZzkdtSfS6tjJvqZOljVzIFQ==}
+
   '@fontsource/fira-code@5.2.7':
     resolution: {integrity: sha512-tnB9NNund9TwIym8/7DMJe573nlPEQb+fKUV5GL8TBYXjIhDvL0D7mgmNVNQUPhXp+R7RylQeiBdkA4EbOHPGQ==}
+
+  '@fontsource/fira-mono@5.2.7':
+    resolution: {integrity: sha512-wYrAn6i3nH6luqQBZxtWUpl4UTUvs9AEbEeZxksPMwIqyjRRaxHTNW3c2VfM50gabS2IS7pT8lVWS2USB4ukYA==}
 
   '@fontsource/geist-mono@5.2.7':
     resolution: {integrity: sha512-xVPVFISJg/K0VVd+aQN0Y7X/sw9hUcJPyDWFJ5GpyU3bHELhoRsJkPSRSHXW32mOi0xZCUQDOaPj1sqIFJ1FGg==}
 
+  '@fontsource/google-sans-code@5.2.4':
+    resolution: {integrity: sha512-4A9QYXJwccX8xjUEXzgTeGg7IbP8oyFKfzyrH50k2a5I7gRlt0AvTZpVDAgtYHJRyARalHWpNnwQi2afS9zlUQ==}
+
   '@fontsource/ibm-plex-mono@5.2.7':
     resolution: {integrity: sha512-MKAb8qV+CaiMQn2B0dIi1OV3565NYzp3WN5b4oT6LTkk+F0jR6j0ZN+5BKJiIhffDC3rtBULsYZE65+0018z9w==}
 
+  '@fontsource/inconsolata@5.2.8':
+    resolution: {integrity: sha512-lIZW+WOZYpUH91g9r6rYYhfTmptF3YPPM54ZOs8IYVeeL4SeiAu4tfj7mdr8llYEq31DLYgi6JtGIJa192gB0Q==}
+
+  '@fontsource/intel-one-mono@5.2.2':
+    resolution: {integrity: sha512-4FecqoAab8y1d1zOoA1NRTj5hjm8KMtuKtMj+ddHtsq9/8vK3NwGdARQ9E8hSxo1lZSaN0QcnJVP89gkmA+vGA==}
+
+  '@fontsource/iosevka@5.2.5':
+    resolution: {integrity: sha512-Zv/UHJodDug1LcnWv2u2+GPp3oWP3U6Xp16cJOsqqZQNsCu8sA/ttT331N0NypxBZ+7c8szlSRlYDcy9liZ8pw==}
+
   '@fontsource/jetbrains-mono@5.2.8':
     resolution: {integrity: sha512-6w8/SG4kqvIMu7xd7wt6x3idn1Qux3p9N62s6G3rfldOUYHpWcc2FKrqf+Vo44jRvqWj2oAtTHrZXEP23oSKwQ==}
+
+  '@fontsource/kode-mono@5.2.8':
+    resolution: {integrity: sha512-BJcgw0Y3o+5d6wod0VBYjOWveeSHUqVh9KHc99posL0wzU+yOACI2zTj6R4khvnG5ZcoVg8KpSf4o9ubGuiY4w==}
+
+  '@fontsource/lilex@5.2.1':
+    resolution: {integrity: sha512-KnfU2zYPB8JWvxbB4SOn3dR3vivBGVPUGHvOIi176b8Uus4iOL2lbF6lrKf8BZlNSM/qeAxYmaMmqnhwZ/KMzQ==}
+
+  '@fontsource/maple-mono@5.2.6':
+    resolution: {integrity: sha512-+VAD7z8nyTkaiz2/Ww639Z5Kp/YJIL4dNMQxydqSMafNb5nKxFeoRq6W3g9WJ04IcBjdBmn0dKFNk90lyz7K+w==}
+
+  '@fontsource/martian-mono@5.2.7':
+    resolution: {integrity: sha512-DU0WVmso0FjwnNf7Z80FhnrF/pCMgNi9ZfHTn1Ws7TM6u00CwV6esjaFkn3blnchn0pRwt63/M/2vfBe6J4mFg==}
+
+  '@fontsource/monaspace-argon@5.2.5':
+    resolution: {integrity: sha512-EJ+jq1Smm3BB+8RK/gwB1uzjrSKdycZkKm8OZGCYvqJiTChKcGe7b2lmj0PmQbb/+lAEdCBIAcFLlPaWhtRANA==}
+
+  '@fontsource/monaspace-krypton@5.2.5':
+    resolution: {integrity: sha512-dOWSb0DtSMfjbptckxTme2FKNfRkFtmTuNRQ86sBki/CanR4ajSrE+GuJoCm9Kl3352CvafoRt2fDo8FU+Gz4A==}
+
+  '@fontsource/monaspace-neon@5.2.5':
+    resolution: {integrity: sha512-TjSSuHC37DroyhP5YCKRCAxdUb3In/uqHzqqW/8Ul+JWilz37d8lr8jFeapnbD3QdYXgiQoU2Rf/CmTdyl06DA==}
+
+  '@fontsource/overpass-mono@5.2.8':
+    resolution: {integrity: sha512-/5r/Km770Ndg+QAS+Qgl9PURqK4K+rGVmlqq1O6EwtmOQKsPBkwD/Cvohmq8tDqwzcRdp0gJi+zIpgSxXaKY1Q==}
+
+  '@fontsource/red-hat-mono@5.2.8':
+    resolution: {integrity: sha512-KiP2OqXbsDAoz6kDNTRjcepp+EeuqxcC2+EWj0MJW3ulpqEA1L5G31KmTRgmnpfxMTqYEESCj99Ldd4rBmC6Xg==}
+
+  '@fontsource/roboto-mono@5.2.9':
+    resolution: {integrity: sha512-iIeSyrRGoM15uIWqXslW1K9UFnUYfnCFNrNoWjXE0huO1L+hM0Jst0KNLuRc7P21xPpGL0bZouzYSX0Em9eyWg==}
+
+  '@fontsource/source-code-pro@5.2.7':
+    resolution: {integrity: sha512-7papq9TH94KT+S5VSY8cU7tFmwuGkIe3qxXRMscuAXH6AjMU+KJI75f28FzgBVDrlMfA0jjlTV4/x5+H5o/5EQ==}
+
+  '@fontsource/space-mono@5.2.9':
+    resolution: {integrity: sha512-b61faFOHEISQ/pD25G+cfGY9o/WW6lRv6hBQQfpWvEJ4y1V+S4gmth95EVyBE2VL3qDYHeVQ8nBzrplzdXTDDg==}
+
+  '@fontsource/spline-sans-mono@5.2.8':
+    resolution: {integrity: sha512-lxHnpGHjPGPXpv+H0SwDZxUkbYrpqSlUBfe1f/ScERQcKhLbQxDMzd7TpRPqIVWC/Ze2WLu0vcOBuL1I8BD5tQ==}
+
+  '@fontsource/ubuntu-mono@5.2.8':
+    resolution: {integrity: sha512-N4nT8+GYWWcDODVSBLU4f3PycZQH9YIF6SypDI0rti3HrLqcXFS9u6wMvAd9vx1FmjAQkYv7Ld9CZ8XYTEOD0A==}
+
+  '@fontsource/victor-mono@5.2.8':
+    resolution: {integrity: sha512-8WYdXLzYNHvsvXWaGW4zs1hNu6RHUrQCVJplS9XKhZZNE1VqxPsm5zSbKQox4YuLZG1fV4fOxIt0SAc+YLGkjg==}
 
   '@hono/node-server@1.19.14':
     resolution: {integrity: sha512-GwtvgtXxnWsucXvbQXkRgqksiH2Qed37H9xHZocE5sA3N8O8O8/8FA3uclQXxXVzc9XBZuEOMK7+r02FmSpHtw==}
@@ -4458,13 +4608,63 @@ snapshots:
 
   '@fontsource-variable/geist@5.2.8': {}
 
+  '@fontsource/anonymous-pro@5.2.8': {}
+
+  '@fontsource/b612-mono@5.2.7': {}
+
+  '@fontsource/commit-mono@5.2.5': {}
+
+  '@fontsource/cousine@5.2.7': {}
+
+  '@fontsource/dm-mono@5.2.7': {}
+
   '@fontsource/fira-code@5.2.7': {}
+
+  '@fontsource/fira-mono@5.2.7': {}
 
   '@fontsource/geist-mono@5.2.7': {}
 
+  '@fontsource/google-sans-code@5.2.4': {}
+
   '@fontsource/ibm-plex-mono@5.2.7': {}
 
+  '@fontsource/inconsolata@5.2.8': {}
+
+  '@fontsource/intel-one-mono@5.2.2': {}
+
+  '@fontsource/iosevka@5.2.5': {}
+
   '@fontsource/jetbrains-mono@5.2.8': {}
+
+  '@fontsource/kode-mono@5.2.8': {}
+
+  '@fontsource/lilex@5.2.1': {}
+
+  '@fontsource/maple-mono@5.2.6': {}
+
+  '@fontsource/martian-mono@5.2.7': {}
+
+  '@fontsource/monaspace-argon@5.2.5': {}
+
+  '@fontsource/monaspace-krypton@5.2.5': {}
+
+  '@fontsource/monaspace-neon@5.2.5': {}
+
+  '@fontsource/overpass-mono@5.2.8': {}
+
+  '@fontsource/red-hat-mono@5.2.8': {}
+
+  '@fontsource/roboto-mono@5.2.9': {}
+
+  '@fontsource/source-code-pro@5.2.7': {}
+
+  '@fontsource/space-mono@5.2.9': {}
+
+  '@fontsource/spline-sans-mono@5.2.8': {}
+
+  '@fontsource/ubuntu-mono@5.2.8': {}
+
+  '@fontsource/victor-mono@5.2.8': {}
 
   '@hono/node-server@1.19.14(hono@4.12.18)':
     dependencies:

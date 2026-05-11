@@ -7,6 +7,7 @@ import {
   RiFileCodeLine,
   RiFlaskLine,
   RiImageLine,
+  RiInformationLine,
   RiLayoutGridLine,
   RiMarkPenLine,
   RiPaletteLine,
@@ -16,7 +17,13 @@ import {
 } from 'react-icons/ri'
 import { useEffect, useState } from 'react'
 import { ChromeStyleCombobox } from '#/components/ChromeStyleCombobox'
+import { FontCombobox } from '#/components/FontCombobox'
 import { SizePresetCombobox } from '#/components/SizePresetCombobox'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '#/components/ui/popover'
 import { isDrawElementImageSupported } from '#/lib/htmlInCanvas'
 import {
   Accordion,
@@ -41,8 +48,6 @@ import {
   type BackgroundType,
   CHROME_COLOR_PRESETS,
   CHROME_STYLE_PATCHES,
-  CODE_FONTS,
-  type CodeFont,
   defaultHighlightFor,
   GRADIENT_PRESETS,
   type Settings,
@@ -88,6 +93,7 @@ const FieldLabel = ({
     {value !== undefined && <span className="tabular-nums">{value}</span>}
   </div>
 )
+
 
 const ColorField = ({
   value,
@@ -276,23 +282,48 @@ export function Controls({
 
             <div className="flex flex-col gap-1.5">
               <FieldLabel label="Font family" />
-              <Select
+              <FontCombobox
                 value={settings.codeFont}
-                onValueChange={(v) => onChange({ codeFont: v as CodeFont })}
-              >
-                <SelectTrigger size="sm" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {CODE_FONTS.map((f) => (
-                    <SelectItem key={f.value} value={f.value}>
-                      <span style={{ fontFamily: f.cssFamily }}>
-                        {f.value}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={(codeFont) => onChange({ codeFont })}
+              />
+            </div>
+
+            <div className="flex items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+              <span className="flex items-center gap-1.5">
+                <span className={settings.htmlInCanvas ? '' : 'opacity-50'}>
+                  Ligatures
+                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label="About ligatures"
+                      className="inline-flex cursor-pointer items-center text-muted-foreground hover:text-foreground"
+                    >
+                      <RiInformationLine className="size-3.5" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="start"
+                    side="top"
+                    className="w-64 text-xs leading-relaxed"
+                  >
+                    <p>
+                      Renders <code>=&gt;</code>, <code>!=</code>,{' '}
+                      <code>-&gt;</code> as single glyphs. Requires the{' '}
+                      <strong>HTML-in-Canvas renderer</strong> (Renderer
+                      section) and a font that ships programming ligatures
+                      (marked with <span aria-hidden>ﬁ</span> in the font
+                      picker).
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              </span>
+              <Switch
+                checked={settings.htmlInCanvas && settings.ligatures}
+                disabled={!settings.htmlInCanvas}
+                onCheckedChange={(ligatures) => onChange({ ligatures })}
+              />
             </div>
 
             <SliderInput
@@ -726,6 +757,7 @@ export function Controls({
                   <span>HTML-in-Canvas (experimental)</span>
                   <span className="text-[10px] text-muted-foreground">
                     Uses the browser's real CSS rendering for PNG export.
+                    Required for ligatures.
                   </span>
                 </span>
                 <Switch
@@ -735,20 +767,6 @@ export function Controls({
                   }
                 />
               </label>
-              {settings.htmlInCanvas && (
-                <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
-                  <span className="flex flex-col">
-                    <span>Enable ligatures</span>
-                    <span className="text-[10px] text-muted-foreground">
-                      Renders =&gt;, !=, -&gt; as single glyphs.
-                    </span>
-                  </span>
-                  <Switch
-                    checked={settings.ligatures}
-                    onCheckedChange={(ligatures) => onChange({ ligatures })}
-                  />
-                </label>
-              )}
             </AccordionContent>
           </AccordionItem>
         )}

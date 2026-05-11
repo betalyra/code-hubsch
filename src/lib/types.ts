@@ -77,6 +77,57 @@ export type CodeFont =
   | 'JetBrains Mono'
   | 'Geist Mono'
   | 'Fira Code'
+  | 'Source Code Pro'
+  | 'Roboto Mono'
+  | 'Space Mono'
+  | 'Inconsolata'
+  | 'Anonymous Pro'
+  | 'Ubuntu Mono'
+  | 'DM Mono'
+  | 'Fira Mono'
+  | 'Cousine'
+  | 'Victor Mono'
+  | 'Commit Mono'
+  | 'Maple Mono'
+  | 'Lilex'
+  | 'Monaspace Argon'
+  | 'Monaspace Krypton'
+  | 'Monaspace Neon'
+  | 'Iosevka'
+  | 'Intel One Mono'
+  | 'Martian Mono'
+  | 'Red Hat Mono'
+  | 'B612 Mono'
+  | 'Kode Mono'
+  | 'Overpass Mono'
+  | 'Spline Sans Mono'
+  | 'Google Sans Code'
+
+export type FontLicense = 'OFL-1.1' | 'Apache-2.0' | 'UFL-1.0'
+
+export interface FontLicenseInfo {
+  readonly id: FontLicense
+  readonly name: string
+  readonly url: string
+}
+
+export const FONT_LICENSES: Record<FontLicense, FontLicenseInfo> = {
+  'OFL-1.1': {
+    id: 'OFL-1.1',
+    name: 'SIL Open Font License 1.1',
+    url: 'https://openfontlicense.org/open-font-license-official-text/',
+  },
+  'Apache-2.0': {
+    id: 'Apache-2.0',
+    name: 'Apache License 2.0',
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.txt',
+  },
+  'UFL-1.0': {
+    id: 'UFL-1.0',
+    name: 'Ubuntu Font License 1.0',
+    url: 'https://ubuntu.com/legal/font-licence',
+  },
+}
 
 export interface Token {
   readonly content: string
@@ -434,9 +485,45 @@ export const THEMES: ReadonlyArray<{
 export const defaultHighlightFor = (theme: Theme): string =>
   THEMES.find((t) => t.value === theme)?.defaultHighlight ?? '#ffffff'
 
-export const CODE_FONTS: ReadonlyArray<{ value: CodeFont; cssFamily: string }> = [
-  { value: 'IBM Plex Mono', cssFamily: '"IBM Plex Mono", monospace' },
-  { value: 'JetBrains Mono', cssFamily: '"JetBrains Mono", monospace' },
-  { value: 'Geist Mono', cssFamily: '"Geist Mono", monospace' },
-  { value: 'Fira Code', cssFamily: '"Fira Code", monospace' },
+export interface CodeFontInfo {
+  readonly value: CodeFont
+  readonly cssFamily: string
+  // Whether the font ships programming ligatures (-> => != === etc.) via
+  // the OpenType `calt`/`liga` features. Only meaningful on the
+  // HTML-in-Canvas render path — Satori can't shape ligatures.
+  readonly ligatures: boolean
+  readonly license: FontLicense
+  readonly homepage: string
+}
+
+export const CODE_FONTS: ReadonlyArray<CodeFontInfo> = [
+  { value: 'Anonymous Pro', cssFamily: '"Anonymous Pro", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://www.marksimonson.com/fonts/view/anonymous-pro' },
+  { value: 'B612 Mono', cssFamily: '"B612 Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://b612-font.com/' },
+  { value: 'Commit Mono', cssFamily: '"Commit Mono", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://commitmono.com/' },
+  { value: 'Cousine', cssFamily: '"Cousine", monospace', ligatures: false, license: 'Apache-2.0', homepage: 'https://fonts.google.com/specimen/Cousine' },
+  { value: 'DM Mono', cssFamily: '"DM Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/googlefonts/dm-mono' },
+  { value: 'Fira Code', cssFamily: '"Fira Code", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://github.com/tonsky/FiraCode' },
+  { value: 'Fira Mono', cssFamily: '"Fira Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/mozilla/Fira' },
+  { value: 'Geist Mono', cssFamily: '"Geist Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://vercel.com/font' },
+  { value: 'Google Sans Code', cssFamily: '"Google Sans Code", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://fonts.google.com/specimen/Google+Sans+Code' },
+  { value: 'IBM Plex Mono', cssFamily: '"IBM Plex Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/IBM/plex' },
+  { value: 'Inconsolata', cssFamily: '"Inconsolata", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/googlefonts/Inconsolata' },
+  { value: 'Intel One Mono', cssFamily: '"Intel One Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/intel/intel-one-mono' },
+  { value: 'Iosevka', cssFamily: '"Iosevka", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://typeof.net/Iosevka/' },
+  { value: 'JetBrains Mono', cssFamily: '"JetBrains Mono", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://www.jetbrains.com/lp/mono/' },
+  { value: 'Kode Mono', cssFamily: '"Kode Mono", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://kodemono.com/' },
+  { value: 'Lilex', cssFamily: '"Lilex", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://github.com/mishamyrt/Lilex' },
+  { value: 'Maple Mono', cssFamily: '"Maple Mono", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://github.com/subframe7536/maple-font' },
+  { value: 'Martian Mono', cssFamily: '"Martian Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/evilmartians/mono' },
+  { value: 'Monaspace Argon', cssFamily: '"Monaspace Argon", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://monaspace.githubnext.com/' },
+  { value: 'Monaspace Krypton', cssFamily: '"Monaspace Krypton", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://monaspace.githubnext.com/' },
+  { value: 'Monaspace Neon', cssFamily: '"Monaspace Neon", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://monaspace.githubnext.com/' },
+  { value: 'Overpass Mono', cssFamily: '"Overpass Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://overpassfont.org/' },
+  { value: 'Red Hat Mono', cssFamily: '"Red Hat Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/RedHatOfficial/RedHatFont' },
+  { value: 'Roboto Mono', cssFamily: '"Roboto Mono", monospace', ligatures: false, license: 'Apache-2.0', homepage: 'https://fonts.google.com/specimen/Roboto+Mono' },
+  { value: 'Source Code Pro', cssFamily: '"Source Code Pro", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/adobe-fonts/source-code-pro' },
+  { value: 'Space Mono', cssFamily: '"Space Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://fonts.google.com/specimen/Space+Mono' },
+  { value: 'Spline Sans Mono', cssFamily: '"Spline Sans Mono", monospace', ligatures: false, license: 'OFL-1.1', homepage: 'https://github.com/SorkinType/SplineSansMono' },
+  { value: 'Ubuntu Mono', cssFamily: '"Ubuntu Mono", monospace', ligatures: false, license: 'UFL-1.0', homepage: 'https://design.ubuntu.com/font' },
+  { value: 'Victor Mono', cssFamily: '"Victor Mono", monospace', ligatures: true, license: 'OFL-1.1', homepage: 'https://rubjo.github.io/victor-mono/' },
 ]

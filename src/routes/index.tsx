@@ -4,6 +4,7 @@ import { RiSettings3Line, RiSparkling2Line } from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
 import { EditorToolbar } from '#/components/EditorToolbar'
+import { FontLicensesLink } from '#/components/FontLicenses'
 import { Preview } from '#/components/Preview'
 import { Button } from '#/components/ui/button'
 import { Separator } from '#/components/ui/separator'
@@ -35,22 +36,18 @@ import type { Settings } from '#/lib/types'
 
 export const Route = createFileRoute('/')({ component: Home })
 
-const SAMPLE_CODE = `import { Effect } from "effect"
+const SAMPLE_CODE = `const isEven = (n: number) => n % 2 === 0
 
-const program = Effect.gen(function* () {
-  const value = yield* Effect.succeed(42)
-  yield* Effect.log(\`The answer is \${value}\`)
-  return value * 2
-})
-
-const result = Effect.runSync(program)
+const doubled = [1, 2, 3, 4]
+  .filter((n) => n !== 0)
+  .map((n) => (isEven(n) ? n * 2 : n))
 `
 
 const INITIAL: Settings = {
   code: SAMPLE_CODE,
   language: 'ts',
   theme: 'one-dark-pro',
-  codeFont: 'IBM Plex Mono',
+  codeFont: 'Monaspace Neon',
   width: 1200,
   height: 675,
   autoHeight: false,
@@ -86,7 +83,7 @@ function Home() {
   const [pages, setPages] = useState<ReadonlyArray<Page>>([])
   const [busy, setBusy] = useState(false)
   const [detected, setDetected] = useState<Detection | undefined>(undefined)
-  const [previewView, setPreviewView] = useState<PreviewView>('actual')
+  const [previewView, setPreviewView] = useState<PreviewView>('fit')
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -280,7 +277,7 @@ function Home() {
               fallbackColor="#d6deeb"
               highlightedLines={settings.highlightedLines}
               highlightColor={settings.highlightColor}
-              showLineNumbers={settings.lineNumbers}
+              ligatures={settings.htmlInCanvas && settings.ligatures}
               onChange={(code) => update({ code })}
               onHighlightChange={(highlightedLines) =>
                 update({ highlightedLines })
@@ -339,6 +336,13 @@ function Home() {
           </div>
         </div>
       </main>
+
+      <footer className="border-t px-4 py-3 text-xs text-muted-foreground sm:px-6">
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-2">
+          <span>Fonts © their respective authors.</span>
+          <FontLicensesLink />
+        </div>
+      </footer>
     </div>
   )
 }
