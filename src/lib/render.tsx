@@ -1,5 +1,7 @@
+import type { ReactElement } from 'react'
 import satori from 'satori'
 import { loadCodeFont, type SatoriFont } from './fonts'
+import { renderTreeToPng } from './htmlInCanvas'
 import { tokenize } from './shiki'
 import type { ChromeStyle, Settings } from './types'
 import { parseLineRanges, type WrappedLine, wrapLines } from './wrap'
@@ -484,10 +486,9 @@ const buildShadow = (intensity: number): string | undefined => {
   return `0 ${offsetY}px ${blur}px rgba(0,0,0,${alpha})`
 }
 
-interface RenderOnePageInput {
+interface BuildPageTreeInput {
   settings: Settings
   pageLines: ReadonlyArray<WrappedLine>
-  fonts: ReadonlyArray<SatoriFont>
   width: number
   height: number
   highlightSet: ReadonlySet<number>
@@ -495,16 +496,15 @@ interface RenderOnePageInput {
   totalSourceLines: number
 }
 
-const renderOnePage = async ({
+const buildPageTree = ({
   settings,
   pageLines,
-  fonts,
   width,
   height,
   highlightSet,
   lineNumberWidth,
   totalSourceLines,
-}: RenderOnePageInput): Promise<string> => {
+}: BuildPageTreeInput): ReactElement => {
   const {
     codeFont,
     fontSize,
@@ -521,6 +521,8 @@ const renderOnePage = async ({
     windowShadow,
     lineNumbers,
     highlightColor,
+    ligatures,
+    htmlInCanvas,
   } = settings
 
   const lineHeightPx = Math.round(fontSize * lineHeight)
@@ -528,6 +530,12 @@ const renderOnePage = async ({
   const fallbackColor = '#d6deeb'
   const backgroundStyle = buildBackground(settings)
   const shadow = buildShadow(windowShadow)
+
+  // font-feature-settings is only meaningful on the HTML-in-Canvas path —
+  // Satori silently ignores it. Explicitly setting "liga"/"calt" to 0
+  // disables ligatures in the live DOM render.
+  const featureSettings =
+    htmlInCanvas && ligatures ? '"liga" 1, "calt" 1' : '"liga" 0, "calt" 0'
 
   const borderStyle =
     settings.borderWidth > 0
@@ -541,7 +549,7 @@ const renderOnePage = async ({
         }
       : {}
 
-  const tree = (
+  return (
     <div
       style={{
         width,
@@ -584,6 +592,7 @@ const renderOnePage = async ({
             color: fallbackColor,
             flex: 1,
             overflow: 'hidden',
+            fontFeatureSettings: featureSettings,
           }}
         >
           {renderTokens({
@@ -602,7 +611,19 @@ const renderOnePage = async ({
       </div>
     </div>
   )
+}
 
+interface RenderOnePageInput extends BuildPageTreeInput {
+  fonts: ReadonlyArray<SatoriFont>
+}
+
+const renderOnePageSvg = async ({
+  fonts,
+  width,
+  height,
+  ...rest
+}: RenderOnePageInput): Promise<string> => {
+  const tree = buildPageTree({ ...rest, width, height })
   return satori(tree, {
     width,
     height,
@@ -615,8 +636,16 @@ const renderOnePage = async ({
   })
 }
 
+const renderOnePagePng = async (
+  input: BuildPageTreeInput,
+): Promise<Blob> => {
+  const tree = buildPageTree(input)
+  return renderTreeToPng(tree, input.width, input.height)
+}
+
 export interface Page {
   svg: string
+  png?: Blob
   pageIndex: number
   width: number
   height: number
@@ -671,24 +700,39 @@ export const renderCodePages = async (
   const fonts = await loadCodeFont(codeFont)
   const highlightSet = new Set<number>(parseLineRanges(highlightedLines))
 
+  const renderPage = async (
+    pageLines: ReadonlyArray<WrappedLine>,
+    pageIndex: number,
+    pageHeight: number,
+  ): Promise<Page> => {
+    const baseInput: BuildPageTreeInput = {
+      settings,
+      pageLines,
+      width,
+      height: pageHeight,
+      highlightSet,
+      lineNumberWidth,
+      totalSourceLines,
+    }
+    const svg = await renderOnePageSvg({ ...baseInput, fonts })
+    // PNG is rendered in parallel via HTML-in-Canvas when enabled. We
+    // still keep the Satori SVG around so the SVG export path keeps
+    // working (canvas rasterisation can't be vectorised).
+    const png = settings.htmlInCanvas
+      ? await renderOnePagePng(baseInput)
+      : undefined
+    return { svg, png, pageIndex, width, height: pageHeight }
+  }
+
   if (autoHeight) {
     const computedHeight =
       outerMargin * 2 +
       chromeHeight +
       paddingY * 2 +
       Math.max(1, wrapped.length) * lineHeightPx
-    const svg = await renderOnePage({
-      settings,
-      pageLines: wrapped,
-      fonts,
-      width,
-      height: computedHeight,
-      highlightSet,
-      lineNumberWidth,
-      totalSourceLines,
-    })
+    const page = await renderPage(wrapped, 0, computedHeight)
     return {
-      pages: [{ svg, pageIndex: 0, width, height: computedHeight }],
+      pages: [page],
       width,
       height: computedHeight,
       totalPages: 1,
@@ -704,23 +748,15 @@ export const renderCodePages = async (
   const linesPerPage = Math.max(1, Math.floor(innerHeight / lineHeightPx))
   const totalPages = Math.max(1, Math.ceil(wrapped.length / linesPerPage))
 
-  const pages = await Promise.all(
-    Array.from({ length: totalPages }, async (_, i): Promise<Page> => {
-      const start = i * linesPerPage
-      const slice = wrapped.slice(start, start + linesPerPage)
-      const svg = await renderOnePage({
-        settings,
-        pageLines: slice,
-        fonts,
-        width,
-        height,
-        highlightSet,
-        lineNumberWidth,
-        totalSourceLines,
-      })
-      return { svg, pageIndex: i, width, height }
-    }),
-  )
+  // HTML-in-Canvas renders sequentially (it mounts a real DOM subtree
+  // off-screen for each page). The Satori path can run in parallel.
+  const pages: Page[] = []
+  for (let i = 0; i < totalPages; i += 1) {
+    const start = i * linesPerPage
+    const slice = wrapped.slice(start, start + linesPerPage)
+    // biome-ignore lint/performance/noAwaitInLoops: sequential by design (see comment above)
+    pages.push(await renderPage(slice, i, height))
+  }
 
   return {
     pages,

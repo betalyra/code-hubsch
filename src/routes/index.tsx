@@ -76,6 +76,8 @@ const INITIAL: Settings = {
   lineNumbers: false,
   highlightedLines: '',
   highlightColor: '#63c4ff',
+  htmlInCanvas: false,
+  ligatures: true,
 }
 
 function Home() {
@@ -124,7 +126,7 @@ function Home() {
     if (!page) return
     setBusy(true)
     try {
-      await copyPngToClipboard(page.svg, page.width, page.height)
+      await copyPngToClipboard(page.svg, page.width, page.height, page.png)
     } catch (e) {
       console.error('Copy failed', e)
     } finally {
@@ -154,14 +156,14 @@ function Home() {
         const page = pages[0]
         if (page) {
           const name = buildDownloadName(settings.filename, settingsKey, 'png')
-          await downloadPng(page.svg, page.width, page.height, name)
+          await downloadPng(page.svg, page.width, page.height, name, page.png)
         }
       } else {
         const first = pages[0]
         if (!first) return
         const name = buildDownloadName(settings.filename, settingsKey, 'zip')
         await downloadPagesZip(
-          pages.map((p) => p.svg),
+          pages.map((p) => ({ svg: p.svg, png: p.png })),
           first.width,
           first.height,
           'png',
@@ -188,7 +190,7 @@ function Home() {
         if (!first) return
         const name = buildDownloadName(settings.filename, settingsKey, 'zip')
         await downloadPagesZip(
-          pages.map((p) => p.svg),
+          pages.map((p) => ({ svg: p.svg })),
           first.width,
           first.height,
           'svg',

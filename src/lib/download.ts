@@ -60,13 +60,18 @@ export const copyPngToClipboard = async (
   svg: string,
   width: number,
   height: number,
+  precomputed?: Blob,
   scale = 2,
 ): Promise<void> => {
   if (typeof ClipboardItem === 'undefined' || !navigator.clipboard?.write) {
     throw new Error('Clipboard image API not supported in this browser')
   }
-  const bytes = await svgToPngBytes(svg, width, height, scale)
-  const blob = new Blob([new Uint8Array(bytes).buffer], { type: 'image/png' })
+  const blob =
+    precomputed ??
+    (await (async () => {
+      const bytes = await svgToPngBytes(svg, width, height, scale)
+      return new Blob([new Uint8Array(bytes).buffer], { type: 'image/png' })
+    })())
   await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
 }
 
@@ -75,31 +80,43 @@ export const downloadPng = async (
   width: number,
   height: number,
   filename = 'code.png',
+  precomputed?: Blob,
   scale = 2,
 ): Promise<void> => {
+  if (precomputed) {
+    triggerDownload(precomputed, filename)
+    return
+  }
   const bytes = await svgToPngBytes(svg, width, height, scale)
   const buffer = new Uint8Array(bytes).buffer
   triggerDownload(new Blob([buffer], { type: 'image/png' }), filename)
 }
 
+export interface PageInput {
+  svg: string
+  png?: Blob
+}
+
 export const downloadPagesZip = async (
-  svgs: ReadonlyArray<string>,
+  pages: ReadonlyArray<PageInput>,
   width: number,
   height: number,
   format: 'png' | 'svg',
   filename: string,
   scale = 2,
 ): Promise<void> => {
-  const pad = String(svgs.length).length
+  const pad = String(pages.length).length
   const files: Record<string, Uint8Array> = {}
-  for (let i = 0; i < svgs.length; i += 1) {
-    const svg = svgs[i]
-    if (svg === undefined) continue
+  for (let i = 0; i < pages.length; i += 1) {
+    const page = pages[i]
+    if (!page) continue
     const name = `code-${String(i + 1).padStart(pad, '0')}.${format}`
     if (format === 'svg') {
-      files[name] = strToU8(svg)
+      files[name] = strToU8(page.svg)
+    } else if (page.png) {
+      files[name] = new Uint8Array(await page.png.arrayBuffer())
     } else {
-      files[name] = await svgToPngBytes(svg, width, height, scale)
+      files[name] = await svgToPngBytes(page.svg, width, height, scale)
     }
   }
   const zipped = zipSync(files)

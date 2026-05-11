@@ -5,6 +5,7 @@ import {
   RiContrast2Line,
   RiDownload2Line,
   RiFileCodeLine,
+  RiFlaskLine,
   RiImageLine,
   RiLayoutGridLine,
   RiMarkPenLine,
@@ -13,8 +14,10 @@ import {
   RiSubtractLine,
   RiWindow2Line,
 } from 'react-icons/ri'
+import { useEffect, useState } from 'react'
 import { ChromeStyleCombobox } from '#/components/ChromeStyleCombobox'
 import { SizePresetCombobox } from '#/components/SizePresetCombobox'
+import { isDrawElementImageSupported } from '#/lib/htmlInCanvas'
 import {
   Accordion,
   AccordionContent,
@@ -198,6 +201,12 @@ export function Controls({
   proposedFilename,
 }: Props) {
   const multi = pageCount > 1
+  // Defer the feature check to after mount so SSR and the initial
+  // client render produce the same DOM — otherwise hydration mismatches.
+  const [htmlInCanvasSupported, setHtmlInCanvasSupported] = useState(false)
+  useEffect(() => {
+    setHtmlInCanvasSupported(isDrawElementImageSupported())
+  }, [])
 
   const appearanceId =
     APPEARANCE_PRESETS.find(
@@ -704,6 +713,45 @@ export function Controls({
             </label>
           </AccordionContent>
         </AccordionItem>
+
+        {/* ─── Renderer (experimental) ───────────────────────────── */}
+        {htmlInCanvasSupported && (
+          <AccordionItem value="renderer">
+            <AccordionTrigger>
+              <SectionTitle icon={<RiFlaskLine />} title="Renderer" />
+            </AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-3">
+              <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+                <span className="flex flex-col">
+                  <span>HTML-in-Canvas (experimental)</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    Uses the browser's real CSS rendering for PNG export.
+                  </span>
+                </span>
+                <Switch
+                  checked={settings.htmlInCanvas}
+                  onCheckedChange={(htmlInCanvas) =>
+                    onChange({ htmlInCanvas })
+                  }
+                />
+              </label>
+              {settings.htmlInCanvas && (
+                <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+                  <span className="flex flex-col">
+                    <span>Enable ligatures</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      Renders =&gt;, !=, -&gt; as single glyphs.
+                    </span>
+                  </span>
+                  <Switch
+                    checked={settings.ligatures}
+                    onCheckedChange={(ligatures) => onChange({ ligatures })}
+                  />
+                </label>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
         {/* ─── Export ─────────────────────────────────────────────── */}
         <AccordionItem value="export">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { type Page, renderCodePages } from '#/lib/render'
 import type { Settings } from '#/lib/types'
 
@@ -50,42 +50,78 @@ export function Preview({ settings, view, onPages }: Props) {
     }
   }, [settings, onPages])
 
+  const pngUrls = useMemo(
+    () => pages.map((p) => (p.png ? URL.createObjectURL(p.png) : undefined)),
+    [pages],
+  )
+  useEffect(
+    () => () => {
+      for (const u of pngUrls) if (u) URL.revokeObjectURL(u)
+    },
+    [pngUrls],
+  )
+
   const isFit = view === 'fit'
 
   return (
     <div className="relative flex w-full flex-col gap-3">
       <div className="flex w-full flex-col gap-3">
         {pages.length > 0 ? (
-          pages.map((page) => (
-            <div
-              key={page.pageIndex}
-              className="relative w-full overflow-hidden rounded-md"
-            >
-              {pages.length > 1 && (
-                <div className="pointer-events-none absolute top-2 right-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground tabular-nums shadow">
-                  {page.pageIndex + 1}/{pages.length}
-                </div>
-              )}
-              {isFit ? (
-                <div
-                  className="w-full"
-                  style={{
-                    aspectRatio: `${page.width} / ${page.height}`,
-                  }}
-                  // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
-                  dangerouslySetInnerHTML={{ __html: fitSvg(page.svg) }}
-                />
-              ) : (
-                <div className="scroll-overlay w-full overflow-x-auto">
+          pages.map((page, i) => {
+            const pngUrl = pngUrls[i]
+            return (
+              <div
+                key={page.pageIndex}
+                className="relative w-full overflow-hidden rounded-md"
+              >
+                {pages.length > 1 && (
+                  <div className="pointer-events-none absolute top-2 right-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground tabular-nums shadow">
+                    {page.pageIndex + 1}/{pages.length}
+                  </div>
+                )}
+                {isFit ? (
                   <div
-                    style={{ width: page.width, height: page.height }}
-                    // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
-                    dangerouslySetInnerHTML={{ __html: page.svg }}
-                  />
-                </div>
-              )}
-            </div>
-          ))
+                    className="w-full"
+                    style={{ aspectRatio: `${page.width} / ${page.height}` }}
+                  >
+                    {pngUrl ? (
+                      <img
+                        src={pngUrl}
+                        alt=""
+                        className="block h-full w-full"
+                      />
+                    ) : (
+                      <div
+                        className="h-full w-full"
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
+                        dangerouslySetInnerHTML={{ __html: fitSvg(page.svg) }}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div className="scroll-overlay w-full overflow-x-auto">
+                    <div
+                      style={{ width: page.width, height: page.height }}
+                    >
+                      {pngUrl ? (
+                        <img
+                          src={pngUrl}
+                          alt=""
+                          className="block h-full w-full max-w-none"
+                        />
+                      ) : (
+                        <div
+                          className="h-full w-full"
+                          // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted satori SVG output
+                          dangerouslySetInnerHTML={{ __html: page.svg }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })
         ) : (
           <div
             className="flex w-full max-w-full items-center justify-center text-muted-foreground"

@@ -210,6 +210,8 @@ export interface Settings {
   lineNumbers: boolean
   highlightedLines: string
   highlightColor: string
+  htmlInCanvas: boolean
+  ligatures: boolean
 }
 
 export interface SizePreset {
