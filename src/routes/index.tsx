@@ -36,11 +36,17 @@ import type { Settings } from '#/lib/types'
 
 export const Route = createFileRoute('/')({ component: Home })
 
-const SAMPLE_CODE = `const isEven = (n: number) => n % 2 === 0
+const SAMPLE_CODE = `import { Effect, pipe } from "effect"
 
-const doubled = [1, 2, 3, 4]
-  .filter((n) => n !== 0)
-  .map((n) => (isEven(n) ? n * 2 : n))
+const greet = (name: string) =>
+  name.length >= 1
+    ? Effect.succeed(\`Hello, \${name}!\`)
+    : Effect.fail("empty" as const)
+
+const program = pipe(
+  greet("world"),
+  Effect.tap((msg) => Effect.log(msg)),
+)
 `
 
 const INITIAL: Settings = {
