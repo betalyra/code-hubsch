@@ -222,9 +222,49 @@ function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b px-4 py-3 sm:px-6 sm:py-4">
         <div className="mx-auto flex max-w-[1600px] items-center gap-2">
-          <RiFlowerLine className="text-xl text-foreground/80" />
-          <h1 className="text-base font-medium tracking-tight sm:text-lg">
-            code hübsch
+          <RiFlowerLine className="text-xl text-rose-400" />
+          <h1
+            className="text-xl leading-none tracking-tight sm:text-2xl"
+            style={{
+              fontFamily: '"Lora Variable", "Lora", serif',
+              fontStyle: 'italic',
+              fontWeight: 500,
+            }}
+            aria-label="code hübsch"
+          >
+            <span aria-hidden>
+              code h
+              <span className="relative inline-block">
+                u
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 flex justify-center"
+                  style={{
+                    top: '0.13em',
+                    gap: '0.05em',
+                    transform: 'translateX(0.04em)',
+                  }}
+                >
+                  <span
+                    className="block rounded-full bg-rose-400"
+                    style={{
+                      width: '0.1em',
+                      height: '0.12em',
+                      transform: 'rotate(12deg)',
+                    }}
+                  />
+                  <span
+                    className="block rounded-full bg-rose-400"
+                    style={{
+                      width: '0.1em',
+                      height: '0.12em',
+                      transform: 'rotate(12deg)',
+                    }}
+                  />
+                </span>
+              </span>
+              bsch
+            </span>
           </h1>
           <Separator
             orientation="vertical"
@@ -293,10 +333,19 @@ function Home() {
 
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                  Preview · {settings.width}×{settings.height}
-                </h2>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <div className="flex items-center gap-2">
+                  <span
+                    aria-hidden
+                    className="size-1.5 rounded-full bg-rose-400/80"
+                  />
+                  <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                    Preview
+                  </h2>
+                </div>
+                <span className="text-xs text-muted-foreground/70 tabular-nums">
+                  {settings.width}×{settings.height}
+                </span>
                 {pages.length > 1 && (
                   <span className="text-xs text-muted-foreground">
                     {pages.length} pages — downloads as zip
@@ -367,7 +416,7 @@ function Home() {
               href="https://betalyra.com/imprint"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground"
+              className="hover:text-rose-400"
             >
               Imprint
             </a>
@@ -375,7 +424,7 @@ function Home() {
               href="https://betalyra.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground"
+              className="hover:text-rose-400"
             >
               Privacy
             </a>

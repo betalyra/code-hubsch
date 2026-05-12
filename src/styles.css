@@ -3,6 +3,7 @@
 @import "tw-animate-css";
 
 @import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/lora/wght-italic.css";
 
 /* Code fonts are registered lazily at runtime via FontFace API (src/lib/fonts.ts). */
 
@@ -58,7 +59,7 @@
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: oklch(0.712 0.194 13.4);
 }
 
 * {

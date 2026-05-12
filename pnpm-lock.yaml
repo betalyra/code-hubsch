@@ -11,7 +11,19 @@ importers:
       '@fontsource-variable/bricolage-grotesque':
         specifier: ^5.2.10
         version: 5.2.10
+      '@fontsource-variable/crimson-pro':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource-variable/familjen-grotesk':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource-variable/fraunces':
+        specifier: ^5.2.9
+        version: 5.2.9
       '@fontsource-variable/geist':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource-variable/lora':
         specifier: ^5.2.8
         version: 5.2.8
       '@fontsource/anonymous-pro':
@@ -23,6 +35,9 @@ importers:
       '@fontsource/commit-mono':
         specifier: ^5.2.5
         version: 5.2.5
+      '@fontsource/cormorant-infant':
+        specifier: ^5.2.11
+        version: 5.2.11
       '@fontsource/cousine':
         specifier: ^5.2.7
         version: 5.2.7
@@ -105,19 +120,19 @@ importers:
         specifier: ^4.1.18
         version: 4.3.0(vite@8.0.11(@types/node@22.19.18)(jiti@2.7.0))
       '@tanstack/react-devtools':
-        specifier: latest
+        specifier: 0.10.2
         version: 0.10.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(csstype@3.2.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(solid-js@1.9.12)
       '@tanstack/react-router':
-        specifier: latest
+        specifier: 1.169.2
         version: 1.169.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-router-devtools':
-        specifier: latest
+        specifier: 1.166.13
         version: 1.166.13(@tanstack/react-router@1.169.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/router-core@1.169.2)(csstype@3.2.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-router-ssr-query':
-        specifier: latest
+        specifier: 1.166.12
         version: 1.166.12(@tanstack/query-core@5.100.9)(@tanstack/react-query@5.100.9(react@19.2.6))(@tanstack/react-router@1.169.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/router-core@1.169.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@tanstack/react-start':
-        specifier: latest
+        specifier: 1.167.65
         version: 1.167.65(crossws@0.4.5(srvx@0.11.15))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.11(@types/node@22.19.18)(jiti@2.7.0))
       '@tanstack/router-plugin':
         specifier: ^1.132.0
@@ -175,7 +190,7 @@ importers:
         specifier: ^0.5.16
         version: 0.5.19(tailwindcss@4.3.0)
       '@tanstack/devtools-vite':
-        specifier: latest
+        specifier: 0.6.0
         version: 0.6.0(vite@8.0.11(@types/node@22.19.18)(jiti@2.7.0))
       '@testing-library/dom':
         specifier: ^10.4.1
@@ -506,8 +521,20 @@ packages:
   '@fontsource-variable/bricolage-grotesque@5.2.10':
     resolution: {integrity: sha512-5EDsCqgGpKVcJWE4sg9ydli+t5WM97mISYw5lla/Ev4z71FwXh1oN0YUU8xjkRW9+wBCGD9R+ntAvI8G4bUFJg==}
 
+  '@fontsource-variable/crimson-pro@5.2.8':
+    resolution: {integrity: sha512-En4uvz5Wb9gZFi/EVPA9jfC7Bh5NLYwOGc2KhUIT5mPSKrOSCaI1IyvQ3SbUXeHJ04MhWJiRLJSuU9CmyDcOIA==}
+
+  '@fontsource-variable/familjen-grotesk@5.2.8':
+    resolution: {integrity: sha512-7WecKO6w+HiNR6cpdYPrFnws9AYWqwdXHisIb/ieeXCS8KaipoU0o0wtq9gilNLvqM2otshTpg/HdDzcH8+hwA==}
+
+  '@fontsource-variable/fraunces@5.2.9':
+    resolution: {integrity: sha512-Y6IjunlN9Ni723np+GIgAaKzCDBrPRrqNi01TZxHs5wtHYROWFM9W6yiT+/gGwSjWIRD18oX17kD/BRWekc/Lw==}
+
   '@fontsource-variable/geist@5.2.8':
     resolution: {integrity: sha512-cJ6m9e+8MQ5dCYJsLylfZrgBh6KkG4bOLckB35Tr9J/EqdkEM6QllH5PxqP1dhTvFup+HtMRPuz9xOjxXJggxw==}
+
+  '@fontsource-variable/lora@5.2.8':
+    resolution: {integrity: sha512-cxjTJ9BbOWIzusewR4UMBLVePvTSWV6dtNaNsCkF/oKoyA68fJGWfaYCILOOP1BObE4dmjfZ3xo6m9hdHhtYhg==}
 
   '@fontsource/anonymous-pro@5.2.8':
     resolution: {integrity: sha512-nCK3XLqSyTjWw94vtgaI5n8j+jsxz7Eds5S38il0DSZ+lBqs/O08m41iXqmm+i/pXqQb/KBxA6hck3hbozZQiA==}
@@ -517,6 +544,9 @@ packages:
 
   '@fontsource/commit-mono@5.2.5':
     resolution: {integrity: sha512-htX8yQWtiPt5L1Hzh4sirvfUJT2+KYiquDB/Q2sY2tWQYplpBUOD5zHnIM3k36Hnm4V+JIIqA/wmwupSQ68WjA==}
+
+  '@fontsource/cormorant-infant@5.2.11':
+    resolution: {integrity: sha512-aY+XHJ3VaM6cnnO6FcPP0HDHDlaI3j41k4355SE0/sJQpDzxwSJrVD+MhbxbiRZor6cgh+5lxw0Hia447U2ozA==}
 
   '@fontsource/cousine@5.2.7':
     resolution: {integrity: sha512-2l6qNHghWeQDGqaR1QmS8iR1YWzhZczcVQpR/MJVNSKE8bELI6v2Rqe+d4pFfG+5PY9QhvZ+aKriqlbKubcR8g==}
@@ -4606,13 +4636,23 @@ snapshots:
 
   '@fontsource-variable/bricolage-grotesque@5.2.10': {}
 
+  '@fontsource-variable/crimson-pro@5.2.8': {}
+
+  '@fontsource-variable/familjen-grotesk@5.2.8': {}
+
+  '@fontsource-variable/fraunces@5.2.9': {}
+
   '@fontsource-variable/geist@5.2.8': {}
+
+  '@fontsource-variable/lora@5.2.8': {}
 
   '@fontsource/anonymous-pro@5.2.8': {}
 
   '@fontsource/b612-mono@5.2.7': {}
 
   '@fontsource/commit-mono@5.2.5': {}
+
+  '@fontsource/cormorant-infant@5.2.11': {}
 
   '@fontsource/cousine@5.2.7': {}
 
