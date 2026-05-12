@@ -129,16 +129,43 @@ export function Editor({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (e.key === 'Tab') {
-      e.preventDefault()
-      const ta = e.currentTarget
-      const start = ta.selectionStart
-      const end = ta.selectionEnd
-      const next = `${code.slice(0, start)}  ${code.slice(end)}`
-      onChange(next)
-      requestAnimationFrame(() => {
-        ta.selectionStart = ta.selectionEnd = start + 2
-      })
+    if (e.key !== 'Tab') return
+    e.preventDefault()
+    const ta = e.currentTarget
+    const { selectionStart: start, selectionEnd: end, value } = ta
+    const lineStart = value.lastIndexOf('\n', start - 1) + 1
+    const spansMultiple = value.slice(start, end).includes('\n')
+
+    if (e.shiftKey) {
+      const block = value.slice(lineStart, end)
+      const lines = block.split('\n')
+      let removedFirst = 0
+      let removedTotal = 0
+      const dedented = lines
+        .map((line, i) => {
+          const m = line.match(/^( {1,2}|\t)/)
+          if (!m) return line
+          const n = m[0].length
+          if (i === 0) removedFirst = n
+          removedTotal += n
+          return line.slice(n)
+        })
+        .join('\n')
+      if (removedTotal === 0) return
+      ta.setSelectionRange(lineStart, end)
+      document.execCommand('insertText', false, dedented)
+      const newStart = Math.max(lineStart, start - removedFirst)
+      const newEnd = end - removedTotal
+      ta.setSelectionRange(newStart, newEnd)
+    } else if (spansMultiple) {
+      const block = value.slice(lineStart, end)
+      const lines = block.split('\n')
+      const indented = lines.map((l) => `  ${l}`).join('\n')
+      ta.setSelectionRange(lineStart, end)
+      document.execCommand('insertText', false, indented)
+      ta.setSelectionRange(start + 2, end + lines.length * 2)
+    } else {
+      document.execCommand('insertText', false, '  ')
     }
   }
 
