@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
-import { RiSettings3Line, RiSparkling2Line } from 'react-icons/ri'
+import { RiFlowerLine, RiSettings3Line } from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
 import { EditorToolbar } from '#/components/EditorToolbar'
@@ -222,9 +222,9 @@ function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b px-4 py-3 sm:px-6 sm:py-4">
         <div className="mx-auto flex max-w-[1600px] items-center gap-2">
-          <RiSparkling2Line className="text-xl text-foreground/80" />
+          <RiFlowerLine className="text-xl text-foreground/80" />
           <h1 className="text-base font-medium tracking-tight sm:text-lg">
-            code pretty
+            code hübsch
           </h1>
           <Separator
             orientation="vertical"
@@ -344,8 +344,7 @@ function Home() {
       </main>
 
       <footer className="border-t px-4 py-3 text-xs text-muted-foreground sm:px-6">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-2">
-          <span>Fonts © their respective authors.</span>
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-end gap-2">
           <FontLicensesLink />
         </div>
       </footer>

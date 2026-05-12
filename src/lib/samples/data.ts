@@ -3,7 +3,7 @@ import type { Language } from '#/lib/types'
 export const DATA_SAMPLES: Partial<Record<Language, ReadonlyArray<string>>> = {
   json: [
     `{
-  "name": "code-pretty",
+  "name": "code-hubsch",
   "version": "1.0.0",
   "private": true,
   "type": "module",
