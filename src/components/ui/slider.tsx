@@ -29,7 +29,7 @@ function Slider({
       min={min}
       max={max}
       className={cn(
-        "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-40 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
+        "group/slider relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-40 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
         className
       )}
       {...props}
@@ -40,14 +40,14 @@ function Slider({
       >
         <SliderPrimitive.Range
           data-slot="slider-range"
-          className="absolute bg-primary select-none data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+          className="absolute bg-primary select-none transition-colors data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full group-has-[[data-slot=slider-thumb]:active]/slider:bg-rose-400"
         />
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="relative block size-4 shrink-0 rounded-full border-2 border-primary bg-background shadow-sm ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:scale-110 focus-visible:ring-3 focus-visible:outline-hidden active:scale-105 disabled:pointer-events-none disabled:opacity-50"
+          className="relative block size-4 shrink-0 rounded-full border-2 border-primary bg-background shadow-sm transition-[transform,border-color] select-none after:absolute after:-inset-2 hover:scale-110 focus-visible:border-rose-400 focus-visible:outline-hidden focus-visible:ring-0 active:scale-105 active:border-rose-400 disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>

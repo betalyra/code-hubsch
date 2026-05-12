@@ -302,7 +302,7 @@ export function Editor({
           autoCorrect="off"
           autoCapitalize="off"
           wrap="off"
-          className="absolute inset-0 h-full w-full resize-none bg-transparent outline-none"
+          className="scroll-overlay absolute inset-0 h-full w-full resize-none bg-transparent outline-none"
           style={{
             ...sharedTextStyle,
             color: 'transparent',

@@ -38,9 +38,15 @@ export function EditorToolbar({
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-      <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-        Editor
-      </h2>
+      <div className="flex items-center gap-2">
+        <span
+          aria-hidden
+          className="size-1.5 rounded-full bg-rose-400/80"
+        />
+        <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+          Editor
+        </h2>
+      </div>
 
       <div className="flex w-full flex-col items-end gap-1 sm:w-auto sm:flex-row-reverse sm:items-center sm:gap-3">
         <div className="w-full sm:w-56">
