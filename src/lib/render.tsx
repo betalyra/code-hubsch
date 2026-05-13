@@ -1,7 +1,10 @@
 import type { ReactElement } from 'react'
 import satori from 'satori'
 import { loadCodeFont, type SatoriFont } from './fonts'
-import { renderTreeToPng } from './htmlInCanvas'
+import {
+  isDrawElementImageSupported,
+  renderTreeToPng,
+} from './htmlInCanvas'
 import { tokenize } from './shiki'
 import type { ChromeStyle, Settings } from './types'
 import { parseLineRanges, type WrappedLine, wrapLines } from './wrap'
@@ -724,9 +727,13 @@ export const renderCodePages = async (
     // PNG is rendered in parallel via HTML-in-Canvas when enabled. We
     // still keep the Satori SVG around so the SVG export path keeps
     // working (canvas rasterisation can't be vectorised).
-    const png = settings.htmlInCanvas
-      ? await renderOnePagePng(baseInput, settings.exportScale)
-      : undefined
+    // Only attempt HTML-in-Canvas if the browser actually supports it —
+    // otherwise renderTreeToPng throws and exporting falls back to the
+    // SVG → canvas path in download.ts.
+    const png =
+      settings.htmlInCanvas && isDrawElementImageSupported()
+        ? await renderOnePagePng(baseInput, settings.exportScale)
+        : undefined
     return { svg, png, pageIndex, width, height: pageHeight }
   }
 

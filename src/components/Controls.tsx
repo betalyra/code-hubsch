@@ -754,7 +754,42 @@ export function Controls({
             <AccordionContent className="flex flex-col gap-3">
               <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
                 <span className="flex flex-col">
-                  <span>HTML-in-Canvas (experimental)</span>
+                  <span className="flex items-center gap-1.5">
+                    HTML-in-Canvas (experimental)
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          aria-label="About the HTML-in-Canvas renderer"
+                          className="inline-flex cursor-pointer items-center text-muted-foreground hover:text-foreground"
+                        >
+                          <RiInformationLine className="size-3.5" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        align="start"
+                        side="top"
+                        className="w-72 text-xs leading-relaxed"
+                      >
+                        <p className="mb-2">
+                          A new web platform feature that paints live DOM
+                          into a canvas — produces crisper text and enables
+                          OpenType programming ligatures.
+                        </p>
+                        <p className="mb-2">
+                          Currently available in{' '}
+                          <strong>Chrome 147+</strong> behind a flag, and
+                          not yet implemented in Safari or Firefox.
+                        </p>
+                        <p>
+                          To enable in Chrome:{' '}
+                          <code className="rounded bg-muted px-1 py-0.5">
+                            chrome://flags/#canvas-draw-element
+                          </code>
+                        </p>
+                      </PopoverContent>
+                    </Popover>
+                  </span>
                   <span className="text-[10px] text-muted-foreground">
                     Uses the browser's real CSS rendering for PNG export.
                     Required for ligatures.
@@ -763,7 +798,11 @@ export function Controls({
                 <Switch
                   checked={settings.htmlInCanvas}
                   onCheckedChange={(htmlInCanvas) =>
-                    onChange({ htmlInCanvas })
+                    onChange(
+                      htmlInCanvas
+                        ? { htmlInCanvas: true, ligatures: true }
+                        : { htmlInCanvas: false },
+                    )
                   }
                 />
               </label>

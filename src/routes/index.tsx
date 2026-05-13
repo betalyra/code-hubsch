@@ -52,7 +52,7 @@ const program = pipe(
 const INITIAL: Settings = {
   code: SAMPLE_CODE,
   language: 'ts',
-  theme: 'one-dark-pro',
+  theme: 'github-dark',
   codeFont: 'Monaspace Neon',
   width: 1200,
   height: 675,
@@ -79,7 +79,7 @@ const INITIAL: Settings = {
   lineNumbers: false,
   highlightedLines: '',
   highlightColor: '#63c4ff',
-  htmlInCanvas: false,
+  htmlInCanvas: true,
   ligatures: true,
   exportScale: 2,
 }
@@ -408,13 +408,13 @@ function Home() {
       </main>
 
       <footer className="border-t px-4 py-3 text-xs text-muted-foreground sm:px-6">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <a
             href="https://betalyra.com"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Betalyra"
-            className="inline-flex h-6 w-18 items-center bg-current text-foreground/80 transition-colors hover:text-foreground"
+            className="inline-flex h-7 w-24 items-center bg-current text-foreground/80 transition-colors hover:text-accent-pink"
             style={{
               maskImage: 'url(/betalyra.svg)',
               maskRepeat: 'no-repeat',
@@ -426,12 +426,25 @@ function Home() {
               WebkitMaskPosition: 'left center',
             }}
           />
-          <nav aria-label="Legal" className="flex flex-wrap items-center gap-3">
+
+          <a
+            href="https://codehubsch.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="leading-none transition-colors hover:text-accent-pink"
+          >
+            codehubsch.com
+          </a>
+
+          <nav
+            aria-label="Legal"
+            className="flex flex-wrap items-center gap-3 leading-none"
+          >
             <a
               href="https://betalyra.com/imprint"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-accent-pink"
+              className="transition-colors hover:text-accent-pink"
             >
               Imprint
             </a>
@@ -439,14 +452,12 @@ function Home() {
               href="https://betalyra.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-accent-pink"
+              className="transition-colors hover:text-accent-pink"
             >
               Privacy
             </a>
-          </nav>
-          <div className="ml-auto">
             <FontLicensesLink />
-          </div>
+          </nav>
         </div>
       </footer>
     </div>
