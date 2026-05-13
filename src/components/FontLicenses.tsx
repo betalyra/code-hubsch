@@ -106,7 +106,7 @@ export function FontLicensesLink() {
           type="button"
           variant="link"
           size="sm"
-          className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
+          className="h-auto p-0 text-xs text-muted-foreground hover:text-accent-pink"
         >
           Font licenses
         </Button>
