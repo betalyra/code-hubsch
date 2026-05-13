@@ -41,7 +41,7 @@ export function EditorToolbar({
       <div className="flex items-center gap-2">
         <span
           aria-hidden
-          className="size-1.5 rounded-full bg-rose-400/80"
+          className="size-1.5 rounded-full bg-accent-pink/80"
         />
         <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
           Editor

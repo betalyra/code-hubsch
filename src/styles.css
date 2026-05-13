@@ -33,6 +33,11 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-pink-strong: var(--accent-pink-strong);
+  --color-accent-pink-soft: var(--accent-pink-soft);
+  --color-accent-pink-fg: var(--accent-pink-fg);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -59,7 +64,12 @@
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.712 0.194 13.4);
+
+  --accent-pink: oklch(0.718 0.202 349.761);
+  --accent-pink-strong: oklch(0.656 0.241 354.308);
+  --accent-pink-soft: oklch(0.718 0.202 349.761 / 18%);
+  --accent-pink-fg: oklch(0.284 0.109 3.907);
+  --ring: var(--accent-pink);
 }
 
 * {
