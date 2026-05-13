@@ -222,7 +222,7 @@ function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b px-4 py-3 sm:px-6 sm:py-4">
         <div className="mx-auto flex max-w-[1600px] items-center gap-2">
-          <RiFlowerLine className="text-xl text-rose-400" />
+          <RiFlowerLine className="text-xl text-accent-pink" />
           <h1
             className="text-xl leading-none tracking-tight sm:text-2xl"
             style={{
@@ -246,7 +246,7 @@ function Home() {
                   }}
                 >
                   <span
-                    className="block rounded-full bg-rose-400"
+                    className="block rounded-full bg-accent-pink"
                     style={{
                       width: '0.1em',
                       height: '0.12em',
@@ -254,7 +254,7 @@ function Home() {
                     }}
                   />
                   <span
-                    className="block rounded-full bg-rose-400"
+                    className="block rounded-full bg-accent-pink"
                     style={{
                       width: '0.1em',
                       height: '0.12em',
@@ -337,7 +337,7 @@ function Home() {
                 <div className="flex items-center gap-2">
                   <span
                     aria-hidden
-                    className="size-1.5 rounded-full bg-rose-400/80"
+                    className="size-1.5 rounded-full bg-accent-pink/80"
                   />
                   <h2 className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                     Preview
@@ -416,7 +416,7 @@ function Home() {
               href="https://betalyra.com/imprint"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-rose-400"
+              className="hover:text-accent-pink"
             >
               Imprint
             </a>
@@ -424,7 +424,7 @@ function Home() {
               href="https://betalyra.com/privacy"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-rose-400"
+              className="hover:text-accent-pink"
             >
               Privacy
             </a>
