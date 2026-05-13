@@ -643,9 +643,10 @@ const renderOnePageSvg = async ({
 
 const renderOnePagePng = async (
   input: BuildPageTreeInput,
+  scale: number,
 ): Promise<Blob> => {
   const tree = buildPageTree(input)
-  return renderTreeToPng(tree, input.width, input.height)
+  return renderTreeToPng(tree, input.width, input.height, scale)
 }
 
 export interface Page {
@@ -724,7 +725,7 @@ export const renderCodePages = async (
     // still keep the Satori SVG around so the SVG export path keeps
     // working (canvas rasterisation can't be vectorised).
     const png = settings.htmlInCanvas
-      ? await renderOnePagePng(baseInput)
+      ? await renderOnePagePng(baseInput, settings.exportScale)
       : undefined
     return { svg, png, pageIndex, width, height: pageHeight }
   }

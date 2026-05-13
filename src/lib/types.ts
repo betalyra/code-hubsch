@@ -263,6 +263,7 @@ export interface Settings {
   highlightColor: string
   htmlInCanvas: boolean
   ligatures: boolean
+  exportScale: 1 | 2 | 3
 }
 
 export interface SizePreset {

@@ -81,6 +81,7 @@ const INITIAL: Settings = {
   highlightColor: '#63c4ff',
   htmlInCanvas: false,
   ligatures: true,
+  exportScale: 2,
 }
 
 function Home() {
@@ -129,13 +130,19 @@ function Home() {
     if (!page) return
     setBusy(true)
     try {
-      await copyPngToClipboard(page.svg, page.width, page.height, page.png)
+      await copyPngToClipboard(
+        page.svg,
+        page.width,
+        page.height,
+        page.png,
+        settings.exportScale,
+      )
     } catch (e) {
       console.error('Copy failed', e)
     } finally {
       setBusy(false)
     }
-  }, [pages])
+  }, [pages, settings.exportScale])
 
   const handleCopySvg = useCallback(async () => {
     if (pages.length === 0) return
@@ -159,7 +166,14 @@ function Home() {
         const page = pages[0]
         if (page) {
           const name = buildDownloadName(settings.filename, settingsKey, 'png')
-          await downloadPng(page.svg, page.width, page.height, name, page.png)
+          await downloadPng(
+            page.svg,
+            page.width,
+            page.height,
+            name,
+            page.png,
+            settings.exportScale,
+          )
         }
       } else {
         const first = pages[0]
@@ -171,12 +185,13 @@ function Home() {
           first.height,
           'png',
           name,
+          settings.exportScale,
         )
       }
     } finally {
       setBusy(false)
     }
-  }, [pages, settings.filename, settingsKey])
+  }, [pages, settings.filename, settingsKey, settings.exportScale])
 
   const handleSvgDownload = useCallback(async () => {
     if (pages.length === 0) return
