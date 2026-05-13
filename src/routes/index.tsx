@@ -221,8 +221,8 @@ function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="border-b px-4 py-3 sm:px-6 sm:py-4">
-        <div className="mx-auto flex max-w-[1600px] items-center gap-2">
-          <RiFlowerLine className="text-xl text-accent-pink" />
+        <div className="mx-auto flex max-w-[1600px] items-center gap-1.5">
+          <RiFlowerLine className="text-2xl text-accent-pink sm:text-3xl" />
           <h1
             className="text-xl leading-none tracking-tight sm:text-2xl"
             style={{
@@ -363,7 +363,7 @@ function Home() {
                   value="fit"
                   size="sm"
                   variant="outline"
-                  className="h-7 px-2 text-[11px]"
+                  className="h-7 w-16 justify-center px-2 text-[11px]"
                   aria-label="Fit to width"
                   title="Fit to width"
                 >
@@ -374,7 +374,7 @@ function Home() {
                   value="actual"
                   size="sm"
                   variant="outline"
-                  className="h-7 px-2 text-[11px]"
+                  className="h-7 w-16 justify-center px-2 text-[11px]"
                   aria-label="Actual size"
                   title="Actual size (1:1)"
                 >

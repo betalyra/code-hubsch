@@ -7,12 +7,14 @@ import { Toggle as TogglePrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const toggleVariants = cva(
-  "group/toggle inline-flex cursor-pointer items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/60 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/60 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "focus-ring group/toggle inline-flex cursor-pointer items-center justify-center gap-1 rounded-md text-sm font-medium whitespace-nowrap transition-colors disabled:pointer-events-none disabled:opacity-50 aria-invalid:outline-destructive aria-pressed:bg-accent-pink-soft aria-pressed:text-foreground data-[state=on]:bg-accent-pink-soft data-[state=on]:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-transparent",
-        outline: "border border-input bg-transparent hover:bg-muted",
+        default:
+          "bg-transparent hover:bg-accent-pink-hover hover:text-foreground",
+        outline:
+          "border border-input bg-transparent hover:border-accent-pink/40 hover:bg-accent-pink-hover hover:text-foreground aria-pressed:border-accent-pink data-[state=on]:border-accent-pink",
       },
       size: {
         default:
