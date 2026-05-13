@@ -105,7 +105,7 @@ const ColorField = ({
   disabled?: boolean
 }) => (
   <div
-    className={`flex items-center gap-1.5 rounded-md border bg-input/30 pr-2 pl-1 ${disabled ? 'pointer-events-none opacity-40' : ''}`}
+    className={`flex items-center gap-1.5 rounded-md border bg-input/15 pr-2 pl-1 ${disabled ? 'pointer-events-none opacity-40' : ''}`}
   >
     <input
       type="color"
@@ -288,7 +288,7 @@ export function Controls({
               />
             </div>
 
-            <div className="flex items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+            <div className="flex items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
               <span className="flex items-center gap-1.5">
                 <span className={settings.htmlInCanvas ? '' : 'opacity-50'}>
                   Ligatures
@@ -346,7 +346,7 @@ export function Controls({
               onChange={(lineHeight) => onChange({ lineHeight })}
             />
 
-            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
               <span>Show line numbers</span>
               <Switch
                 checked={settings.lineNumbers}
@@ -479,7 +479,7 @@ export function Controls({
                         type="button"
                         title={g.label}
                         onClick={() => applyGradientPreset(g.id)}
-                        className={`h-8 rounded-md border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-105'}`}
+                        className={`h-8 rounded-sm border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-105'}`}
                         style={{
                           backgroundImage: `linear-gradient(${g.angle}deg, ${g.from}, ${g.to})`,
                         }}
@@ -533,7 +533,7 @@ export function Controls({
               />
             )}
 
-            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
               <span className="flex items-center gap-1.5">
                 <RiContrast2Line className="text-muted-foreground" />
                 Transparent canvas
@@ -554,7 +554,7 @@ export function Controls({
             <SectionTitle icon={<RiWindow2Line />} title="Window" />
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-3">
-            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
               <span>Show chrome</span>
               <Switch
                 checked={settings.chrome}
@@ -611,7 +611,7 @@ export function Controls({
                         type="button"
                         title={c.label}
                         onClick={() => onChange({ chromeColor: c.hex })}
-                        className={`h-6 rounded border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-110'}`}
+                        className={`h-6 rounded-sm border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-110'}`}
                         style={{ backgroundColor: c.hex }}
                       />
                     )
@@ -735,7 +735,7 @@ export function Controls({
               </div>
             </div>
 
-            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+            <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
               <span>Auto-fit height to code</span>
               <Switch
                 checked={settings.autoHeight}
@@ -752,7 +752,7 @@ export function Controls({
               <SectionTitle icon={<RiFlaskLine />} title="Renderer" />
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-3">
-              <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/20 px-2.5 py-2 text-xs">
+              <label className="flex cursor-pointer items-center justify-between rounded-md border bg-input/15 px-2.5 py-2 text-xs">
                 <span className="flex flex-col">
                   <span>HTML-in-Canvas (experimental)</span>
                   <span className="text-[10px] text-muted-foreground">
