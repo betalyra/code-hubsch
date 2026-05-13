@@ -1,6 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
-import { RiFlowerLine, RiSettings3Line } from 'react-icons/ri'
+import {
+  RiFlaskLine,
+  RiFlowerLine,
+  RiSettings3Line,
+} from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
 import { Editor } from '#/components/Editor'
 import { EditorToolbar } from '#/components/EditorToolbar'
@@ -289,13 +293,27 @@ function Home() {
             tweet-ready code images
           </span>
 
+          <div className="ml-auto flex items-center gap-3">
+            <a
+              href="https://betalyra.com/labs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent-pink sm:inline-flex"
+            >
+              More from Betalyra
+              <span className="inline-flex items-center gap-0.5">
+                <RiFlaskLine className="size-4" />
+                Labs
+              </span>
+            </a>
+
           <Sheet>
             <SheetTrigger asChild>
               <Button
                 type="button"
                 size="sm"
                 variant="outline"
-                className="ml-auto lg:hidden"
+                className="lg:hidden"
                 aria-label="Open settings"
               >
                 <RiSettings3Line data-icon="inline-start" />
@@ -312,6 +330,7 @@ function Home() {
               <Controls {...controlsProps} />
             </SheetContent>
           </Sheet>
+          </div>
         </div>
       </header>
 
