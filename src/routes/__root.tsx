@@ -29,6 +29,17 @@ export const Route = createRootRoute({
         href: '/favicon.svg',
       },
     ],
+    scripts: [
+      // Privacy-friendly analytics by Plausible
+      {
+        async: true,
+        src: 'https://plausible.io/js/pa-qdnnLmhFbVNSCk-wXrZ8C.js',
+      },
+      {
+        children:
+          'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()',
+      },
+    ],
   }),
   shellComponent: RootDocument,
 })
