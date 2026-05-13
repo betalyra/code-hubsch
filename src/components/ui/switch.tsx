@@ -17,14 +17,14 @@ function Switch({
       data-slot="switch"
       data-size={size}
       className={cn(
-        "peer group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-2 focus-visible:ring-ring aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/60 data-[size=default]:h-5 data-[size=default]:w-9 data-[size=sm]:h-4 data-[size=sm]:w-7 data-[state=checked]:bg-accent-pink/70 data-[state=unchecked]:bg-input data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        "focus-ring peer group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors after:absolute after:-inset-x-3 after:-inset-y-2 aria-invalid:outline-destructive data-[size=default]:h-5 data-[size=default]:w-9 data-[size=sm]:h-4 data-[size=sm]:w-7 data-[state=checked]:bg-accent-pink data-[state=unchecked]:bg-input hover:data-[state=checked]:bg-accent-pink-strong data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
       {...props}
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
-        className="pointer-events-none block rounded-full bg-background shadow-sm ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[state=checked]/switch:translate-x-full group-data-[state=unchecked]/switch:translate-x-0"
+        className="pointer-events-none block rounded-full shadow-sm ring-0 transition-[transform,background-color] group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[state=checked]/switch:translate-x-full group-data-[state=checked]/switch:bg-background group-data-[state=unchecked]/switch:translate-x-0 group-data-[state=unchecked]/switch:bg-foreground/85 group-hover/switch:group-data-[state=unchecked]/switch:bg-accent-pink"
       />
     </SwitchPrimitive.Root>
   )

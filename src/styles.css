@@ -36,6 +36,7 @@
   --color-accent-pink: var(--accent-pink);
   --color-accent-pink-strong: var(--accent-pink-strong);
   --color-accent-pink-soft: var(--accent-pink-soft);
+  --color-accent-pink-hover: var(--accent-pink-hover);
   --color-accent-pink-fg: var(--accent-pink-fg);
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -68,6 +69,7 @@
   --accent-pink: oklch(0.718 0.202 349.761);
   --accent-pink-strong: oklch(0.656 0.241 354.308);
   --accent-pink-soft: oklch(0.718 0.202 349.761 / 18%);
+  --accent-pink-hover: oklch(0.718 0.202 349.761 / 10%);
   --accent-pink-fg: oklch(0.284 0.109 3.907);
   --ring: var(--accent-pink);
 }
@@ -91,6 +93,15 @@ body {
 
 button {
   cursor: pointer;
+}
+
+@utility focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 80ms ease;
+  &:focus-visible {
+    outline-color: var(--accent-pink);
+  }
 }
 
 .scroll-overlay {

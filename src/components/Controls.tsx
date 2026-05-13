@@ -105,19 +105,19 @@ const ColorField = ({
   disabled?: boolean
 }) => (
   <div
-    className={`flex items-center gap-1.5 rounded-md border bg-input/15 pr-2 pl-1 ${disabled ? 'pointer-events-none opacity-40' : ''}`}
+    className={`flex h-8 items-center gap-1.5 rounded-md border border-input bg-transparent pr-2 pl-1 transition-colors hover:border-accent-pink/40 hover:bg-accent-pink-hover has-[input:focus-visible]:border-accent-pink/40 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-accent-pink dark:bg-input/30 ${disabled ? 'pointer-events-none opacity-40' : ''}`}
   >
     <input
       type="color"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-6 w-6 cursor-pointer rounded border-0 bg-transparent p-0"
+      className="size-5 cursor-pointer rounded-sm border-0 bg-transparent p-0 outline-none"
     />
     <input
       type="text"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-7 w-full bg-transparent text-xs tabular-nums outline-none"
+      className="h-full w-full bg-transparent text-xs tabular-nums outline-none placeholder:text-muted-foreground"
     />
   </div>
 )
@@ -479,7 +479,7 @@ export function Controls({
                         type="button"
                         title={g.label}
                         onClick={() => applyGradientPreset(g.id)}
-                        className={`h-8 rounded-sm border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-105'}`}
+                        className={`focus-ring h-8 cursor-pointer rounded-sm border-2 transition-colors ${active ? 'border-accent-pink' : 'border-border/60 hover:border-accent-pink/60'}`}
                         style={{
                           backgroundImage: `linear-gradient(${g.angle}deg, ${g.from}, ${g.to})`,
                         }}
@@ -611,7 +611,7 @@ export function Controls({
                         type="button"
                         title={c.label}
                         onClick={() => onChange({ chromeColor: c.hex })}
-                        className={`h-6 rounded-sm border transition-all ${active ? 'ring-2 ring-ring ring-offset-2 ring-offset-card' : 'hover:scale-110'}`}
+                        className={`focus-ring h-6 cursor-pointer rounded-sm border-2 transition-colors ${active ? 'border-accent-pink' : 'border-border/60 hover:border-accent-pink/60'}`}
                         style={{ backgroundColor: c.hex }}
                       />
                     )

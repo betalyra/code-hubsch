@@ -1,7 +1,6 @@
 import { useState, useSyncExternalStore } from 'react'
 import {
   RiArrowDownSLine,
-  RiCheckLine,
   RiCheckboxBlankCircleFill,
   RiCheckboxBlankCircleLine,
   RiErrorWarningLine,
@@ -109,14 +108,6 @@ const FontRow = ({
       onSelect={onSelect}
       className="flex items-center gap-2 py-1.5"
     >
-      <Slot>
-        {selected && (
-          <RiCheckLine
-            className="size-3.5 text-emerald-400"
-            aria-label="Selected"
-          />
-        )}
-      </Slot>
       <span
         className="flex-1 truncate text-xs"
         style={{ fontFamily: status === 'loaded' ? cssFamily : undefined }}
