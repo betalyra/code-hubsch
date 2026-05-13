@@ -72,35 +72,34 @@ const waitForPaint = (canvas: HTMLCanvasElement): Promise<void> =>
     setTimeout(done, 250)
   })
 
-const SUPERSAMPLE = 2
-
 export const renderTreeToPng = async (
   tree: ReactElement,
   width: number,
   height: number,
+  scale = 2,
 ): Promise<Blob> => {
   if (!isDrawElementImageSupported()) {
     throw new Error('drawElementImage is not supported in this browser')
   }
   const host = ensureOffscreenHost()
-  // Render at SUPERSAMPLE× the requested dimensions so the browser's
-  // grayscale-AA rasteriser has more pixels to work with, then downscale
-  // back to the requested size. The exported PNG matches what the user
-  // configured, but with super-sampled AA quality.
-  const renderWidth = Math.round(width * SUPERSAMPLE)
-  const renderHeight = Math.round(height * SUPERSAMPLE)
+  // Render at `scale`× the requested CSS dimensions via CSS zoom so the
+  // browser rasterises fonts, borders and gradients at the higher density.
+  // Capture canvas matches that resolution exactly so drawElementImage
+  // maps 1:1 with no internal resample. Output PNG ends up at scale×
+  // the user's canvas size.
+  const outW = Math.round(width * scale)
+  const outH = Math.round(height * scale)
   const canvas = document.createElement('canvas')
-  canvas.width = renderWidth
-  canvas.height = renderHeight
+  canvas.width = outW
+  canvas.height = outH
   canvas.setAttribute('layoutsubtree', '')
-  // The element drawElementImage receives must be a direct child of the
-  // canvas. CSS `zoom` rescales the layout of descendants — fonts,
-  // paddings, borders all rasterise at the larger size, which is the
-  // actual mechanism behind super-sampled AA. `transform: scale()` would
-  // not work here: it scales the already-rasterised bitmap rather than
-  // re-rasterising at higher density.
   const inner = document.createElement('div')
-  inner.style.cssText = `width:${width}px;height:${height}px;zoom:${SUPERSAMPLE};`
+  // -webkit-font-smoothing: antialiased forces Chromium off macOS's
+  // default subpixel AA so the captured glyphs match Satori's grayscale-AA
+  // weight and don't bake LCD-specific color fringing into the PNG.
+  inner.style.cssText =
+    `width:${width}px;height:${height}px;zoom:${scale};` +
+    `-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;`
   canvas.appendChild(inner)
   host.appendChild(canvas)
 
@@ -121,18 +120,8 @@ export const renderTreeToPng = async (
       throw new Error('drawElementImage not available on this canvas context')
     }
     ctx.drawElementImage(inner, 0, 0)
-    // Downscale the supersampled bitmap onto a canvas at the user's
-    // requested size. High-quality smoothing preserves the AA.
-    const out = document.createElement('canvas')
-    out.width = width
-    out.height = height
-    const outCtx = out.getContext('2d')
-    if (!outCtx) throw new Error('Could not create downscale context')
-    outCtx.imageSmoothingEnabled = true
-    outCtx.imageSmoothingQuality = 'high'
-    outCtx.drawImage(canvas, 0, 0, width, height)
     const blob = await new Promise<Blob>((resolve, reject) => {
-      out.toBlob(
+      canvas.toBlob(
         (b) => (b ? resolve(b) : reject(new Error('toBlob returned null'))),
         'image/png',
       )

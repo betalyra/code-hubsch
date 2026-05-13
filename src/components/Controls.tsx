@@ -791,6 +791,49 @@ export function Controls({
                 </span>
               </div>
             )}
+            <div className="flex flex-col gap-1.5">
+              <FieldLabel
+                label="PNG scale"
+                value={`${settings.width * settings.exportScale} × ${settings.height * settings.exportScale} px`}
+              />
+              <ToggleGroup
+                type="single"
+                spacing={0}
+                value={String(settings.exportScale)}
+                onValueChange={(v) => {
+                  if (!v) return
+                  const n = Number(v)
+                  if (n === 1 || n === 2 || n === 3)
+                    onChange({ exportScale: n })
+                }}
+                className="grid w-full grid-cols-3"
+              >
+                <ToggleGroupItem
+                  value="1"
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-[11px]"
+                >
+                  1×
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="2"
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-[11px]"
+                >
+                  2×
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="3"
+                  size="sm"
+                  variant="outline"
+                  className="h-7 text-[11px]"
+                >
+                  3×
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
             <div className="grid grid-cols-2 gap-1.5">
               <Button
                 type="button"
