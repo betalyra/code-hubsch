@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { cssFamilyFor as customCssFamily } from '#/lib/customFonts'
 import { tokenize } from '#/lib/shiki'
 import {
   CODE_FONTS,
@@ -25,7 +26,7 @@ interface Props {
 }
 
 const fontFamilyFor = (font: string): string =>
-  CODE_FONTS.find((f) => f.value === font)?.cssFamily ?? font
+  CODE_FONTS.find((f) => f.value === font)?.cssFamily ?? customCssFamily(font)
 
 const overlayColor = (hex: string): string => {
   const m = hex.match(/^#?([0-9a-fA-F]{6})$/)

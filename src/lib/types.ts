@@ -235,7 +235,9 @@ export interface Settings {
   code: string
   language: Language
   theme: Theme
-  codeFont: CodeFont
+  // Built-in font name (member of CodeFont) or a user-uploaded custom
+  // font's name. Persisted in localStorage; registry key in fonts.ts.
+  codeFont: string
   width: number
   height: number
   autoHeight: boolean
