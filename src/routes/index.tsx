@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import {
   RiFlaskLine,
   RiFlowerLine,
+  RiGithubFill,
   RiSettings3Line,
 } from 'react-icons/ri'
 import { Controls } from '#/components/Controls'
@@ -476,6 +477,17 @@ function Home() {
               Privacy
             </a>
             <FontLicensesLink />
+            <Separator orientation="vertical" className="h-3" />
+            <a
+              href="https://github.com/betalyra/code-hubsch"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View on GitHub"
+              className="inline-flex items-center gap-1.5 transition-colors hover:text-accent-pink"
+            >
+              <RiGithubFill className="size-4" />
+              View on GitHub
+            </a>
           </nav>
         </div>
       </footer>
