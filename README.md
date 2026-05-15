@@ -8,6 +8,18 @@ Tweet-ready code images. Paste in a snippet, pick a theme and font, export a cle
   <img src="./public/code-hubsch.png" alt="code hübsch screenshot" width="640" />
 </p>
 
+## Features
+
+- 🔤 Ligature support
+- 🎨 30+ bundled programming fonts
+- 📐 SVG & PNG export
+- 📜 Multi-page export for long snippets
+- 🐦 Tweet, OG and slide presets
+- ✨ Auto-fit height
+- 🌫️ Transparent canvas
+- 🧪 HTML-in-Canvas renderer
+- 🔒 No signup, open source
+
 ## Development
 
 ```bash
