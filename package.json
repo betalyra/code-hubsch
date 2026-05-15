@@ -1,7 +1,24 @@
 {
   "name": "@betalyra/code-hubsch",
+  "version": "0.1.0",
+  "description": "code hübsch — tweet-ready code images",
   "private": true,
   "type": "module",
+  "license": "MIT",
+  "author": "Betalyra Sociedade Unipessoal Lda.",
+  "homepage": "https://github.com/betalyra/code-hubsch#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/betalyra/code-hubsch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/betalyra/code-hubsch/issues"
+  },
+  "keywords": [
+    "code",
+    "syntax-highlighting",
+    "screenshot"
+  ],
   "imports": {
     "#/*": "./src/*"
   },
