@@ -1,3 +1,8 @@
+import {
+  base64ToBytes,
+  findCustomFont,
+  subscribeCustomFonts,
+} from './customFonts'
 import type { CodeFont } from './types'
 
 // Each variant is loaded lazily via a dynamic import of the woff file as an
@@ -160,14 +165,14 @@ export interface SatoriFont {
 
 export type FontStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
-const statuses = new Map<CodeFont, FontStatus>()
+const statuses = new Map<string, FontStatus>()
 const listeners = new Set<() => void>()
 
 const notify = () => {
   for (const l of listeners) l()
 }
 
-export const getFontStatus = (font: CodeFont): FontStatus =>
+export const getFontStatus = (font: string): FontStatus =>
   statuses.get(font) ?? 'idle'
 
 export const subscribeFontStatus = (cb: () => void): (() => void) => {
@@ -196,7 +201,7 @@ const fetchBuffer = (variant: FontVariant): Promise<ArrayBuffer> => {
 }
 
 const loadVariant = async (
-  font: CodeFont,
+  font: string,
   variant: FontVariant,
 ): Promise<SatoriFont> => {
   const buffer = await fetchBuffer(variant)
@@ -226,17 +231,60 @@ const loadVariant = async (
   }
 }
 
-const loadPromises = new Map<CodeFont, Promise<ReadonlyArray<SatoriFont>>>()
+const loadPromises = new Map<string, Promise<ReadonlyArray<SatoriFont>>>()
+
+// Custom fonts can be added, replaced, or removed at any time; invalidate
+// any cached promise/status for non-built-in names so the next consumer
+// re-reads from storage.
+subscribeCustomFonts(() => {
+  for (const name of Array.from(loadPromises.keys())) {
+    if (!(name in REGISTRY)) {
+      loadPromises.delete(name)
+      statuses.delete(name)
+    }
+  }
+  notify()
+})
+
+const isBuiltIn = (font: string): font is CodeFont => font in REGISTRY
+
+const loadCustomVariants = async (
+  font: string,
+): Promise<ReadonlyArray<SatoriFont>> => {
+  const entry = findCustomFont(font)
+  if (!entry) throw new Error(`Unknown custom font: ${font}`)
+  return Promise.all(
+    entry.variants.map(async (v) => {
+      const buffer = base64ToBytes(v.data)
+      if (typeof document !== 'undefined' && 'fonts' in document) {
+        try {
+          const face = new FontFace(font, buffer, {
+            weight: String(v.weight),
+            style: v.style,
+          })
+          await face.load()
+          document.fonts.add(face)
+        } catch {
+          // Non-fatal: Satori path still works via the buffer.
+        }
+      }
+      return { name: font, data: buffer, weight: v.weight, style: v.style }
+    }),
+  )
+}
 
 export const loadCodeFont = async (
-  font: CodeFont,
+  font: string,
 ): Promise<ReadonlyArray<SatoriFont>> => {
   const existing = loadPromises.get(font)
   if (existing) return existing
-  const variants = REGISTRY[font]
   statuses.set(font, 'loading')
   notify()
-  const promise = Promise.all(variants.map((v) => loadVariant(font, v)))
+  const promise = (
+    isBuiltIn(font)
+      ? Promise.all(REGISTRY[font].map((v) => loadVariant(font, v)))
+      : loadCustomVariants(font)
+  )
     .then((result) => {
       statuses.set(font, 'loaded')
       notify()
